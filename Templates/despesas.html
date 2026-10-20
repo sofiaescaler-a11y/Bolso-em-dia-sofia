@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Despesas - Bolso em Dia</title>
+    <link rel="icon" href="{{ url_for('static', filename='uploads/logo-escuro.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/despesas.css') }}">
+</head>
+
+<body class="pagina-sistema">
+    <aside class="menu-lateral">
+        <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
+        <img class="logo-perfil" src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}" alt="Bolso em Dia">
+
+        <nav class="navegacao-perfil">
+            <a href="{{ url_for('dashboard') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('rendimentos') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
+                <span>Rendimentos</span>
+            </a>
+
+            <a href="{{ url_for('despesas') }}" class="pagina-ativa">
+                <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
+                <span>Despesas</span>
+            </a>
+
+            <a href="{{ url_for('dia_trabalhado') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}" alt="">
+                <span>Dia Trabalhado</span>
+            </a>
+
+            <a href="{{ url_for('servico_extra') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
+                <span>Serviço Extra</span>
+            </a>
+
+            <a href="{{ url_for('todas_categorias') }}">
+                <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
+                <span>Categorias</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-relatorios.png') }}" alt="">
+                <span>Relatórios</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-historico.png') }}" alt="">
+                <span>Histórico Semanal</span>
+            </a>
+        </nav>
+
+        <a class="sair-perfil" href="{{ url_for('logout') }}">
+            <div class="sair-conteudo">
+                <img src="{{ url_for('static', filename='uploads/perfil-sair.png') }}" alt="">
+                <span>Sair</span>
+            </div>
+        </a>
+    </aside>
+
+    <main class="conteudo-sistema">
+        <header class="topo-perfil">
+            <div></div>
+
+            <a href="{{ url_for('perfil') }}" class="usuario-logado">
+                {% if usuario[9] %}
+                    <img src="{{ url_for('static', filename='Uploads/' + usuario[9]) }}" alt="Foto do usuário">
+                {% else %}
+                    <img src="{{ url_for('static', filename='Uploads/perfil-usuario-topo.png') }}" alt="Foto padrão">
+                {% endif %}
+                <div>
+                    <strong>{{ usuario[0].split()[:2] | join(' ') }}</strong>
+                    <span>{{ usuario[1] }}</span>
+                </div>
+            </a>
+        </header>
+
+        <div class="linha-topo"></div>
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensagem in mensagens %}
+                <p class="mensagem {{ categoria }}">{{ mensagem }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="cabecalho-despesa">
+            <section class="titulo-perfil">
+                <p>Olá, {{ usuario[0].split()[:2] | join(' ') }}!</p>
+                <h1>Despesas</h1>
+                <p>Gerencie e acompanhe todas as suas despesas.</p>
+            </section>
+
+            <form action="{{ url_for('movimentacao') }}" method="GET">
+                <button class="btn-adicionar-despesa" type="submit">
+                    <img src="{{ url_for('static', filename='uploads/icone-mais.png') }}" alt="">
+                    <span>Adicionar despesa</span>
+                </button>
+            </form>
+        </div>
+
+        <section class="cards">
+            <div class="card">
+                <img class="card-img" src="{{ url_for('static', filename='uploads/perfil-despesa-vermelho.png') }}" alt="">
+                <div class="card-info">
+                    <p class="texto">Total de despesas</p>
+                    <p class="preco">{{ "R$ %.2f"|format(total_despesas|default(0)) }}</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img class="card-img" src="{{ url_for('static', filename='uploads/perfil-despesa-vermelho.png') }}" alt="">
+                <div class="card-info">
+                    <p class="texto">Despesas este mês</p>
+                    <p class="preco">{{ "R$ %.2f"|format(despesas_mes|default(0)) }}</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <img class="card-img2" src="{{ url_for('static', filename='uploads/menu-verde.png') }}" alt="">
+                <div class="card-info">
+                    <p class="texto">Quantidade de despesas</p>
+                    <p class="preco2">{{ quantidade_despesas|default(0) }}</p>
+                </div>
+            </div>
+        </section>
+
+        <div class="filtros-despesa">
+            <button class="filtro ativo" type="button">Todas</button>
+            <button class="filtro" type="button">Este mês</button>
+            <button class="filtro" type="button">Últimos 3 meses</button>
+        </div>
+
+        <section class="minhas-despesas">
+            <h2>Minhas despesas</h2>
+
+            <div class="filtros-tabela">
+                <div class="campo-busca">
+                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/lupa-azul-escuro.png') }}" alt="">
+                    <input type="text" placeholder="Buscar despesas por descrição...">
+                </div>
+
+                <button class="filtro-tabela" type="button">
+                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/calendario-preto.png') }}" alt="">
+                    <span>Todos os meses</span>
+                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
+                </button>
+
+                <button class="filtro-tabela" type="button">
+                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/etiqueta-preta.png') }}" alt="">
+                    <span>Todas as categorias</span>
+                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
+                </button>
+
+                <button class="filtro-tabela" type="button">
+                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/barras-verticais.png') }}" alt="">
+                    <span>Ordenar por data</span>
+                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
+                </button>
+            </div>
+
+            <div class="tabela-despesas-container">
+                <table class="tabela-despesas">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="th-ordenacao">
+                                    <span>Data</span>
+                                    <img class="setas" src="{{ url_for('static', filename='uploads/setas.png') }}" alt="">
+                                </div>
+                            </th>
+                            <th>Categoria</th>
+                            <th>Descrição</th>
+                            <th>
+                                <div class="th-ordenacao">
+                                    <span>Valor</span>
+                                    <img class="setas" src="{{ url_for('static', filename='uploads/setas.png') }}" alt="">
+                                </div>
+                            </th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabela-despesa">
+                        {% for despesa in despesas|default([]) %}
+                            <tr>
+                                <td>{{ despesa[1] }}</td>
+                                <td>{{ despesa[2] }}</td>
+                                <td>{{ despesa[3] }}</td>
+                                <td>{{ "R$ %.2f"|format(despesa[4]) }}</td>
+                                <td>
+                                    <div class="acoes-despesa">
+                                        <a href="{{ url_for('editar_movimentacao', id=despesa[0]) }}">Editar</a>
+
+                                        <form action="{{ url_for('inativar_movimentacao', id=despesa[0]) }}" method="POST">
+                                            {% if despesa[5] == 1 %}
+                                                <input type="hidden" name="ativar" value="0">
+                                                <button type="submit">Inativar</button>
+                                            {% else %}
+                                                <input type="hidden" name="ativar" value="1">
+                                                <button type="submit">Ativar</button>
+                                            {% endif %}
+                                        </form>
+
+                                        <form action="{{ url_for('excluir_movimentacao', id=despesa[0]) }}"
+                                              method="POST"
+                                              onsubmit="return confirm('Deseja realmente excluir esta despesa?')">
+                                            <button type="submit" title="Excluir">
+                                                Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

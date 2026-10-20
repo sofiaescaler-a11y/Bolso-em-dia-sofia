@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adicionar Categoria - Bolso em Dia</title>
+    <link rel="icon" href="{{ url_for('static', filename='uploads/logo-escuro.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/nova_categoria.css') }}">
+</head>
+<body class="pagina-sistema">
+
+    <aside class="menu-lateral">
+        <a href="{{ url_for('movimentacao') }}" class="seta-voltar">‹</a>
+        <img class="logo-perfil" src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}" alt="Bolso em Dia">
+
+        <nav class="navegacao-perfil">
+            <a href="{{ url_for('dashboard') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('rendimentos') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
+                <span>Rendimentos</span>
+            </a>
+
+            <a href="{{ url_for('despesas') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
+                <span>Despesas</span>
+            </a>
+
+            <a href="{{ url_for('dia_trabalhado') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}" alt="">
+                <span>Dia Trabalhado</span>
+            </a>
+
+            <a href="{{ url_for('servico_extra') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
+                <span>Serviço Extra</span>
+            </a>
+
+            <a href="{{ url_for('todas_categorias') }}" class="pagina-ativa">
+                <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
+                <span>Categorias</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-relatorios.png') }}" alt="">
+                <span>Relatórios</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-historico.png') }}" alt="">
+                <span>Histórico Semanal</span>
+            </a>
+        </nav>
+
+        <a class="sair-perfil" href="{{ url_for('logout') }}">
+            <div class="sair-conteudo">
+                <img src="{{ url_for('static', filename='uploads/perfil-sair.png') }}" alt="">
+                <span>Sair</span>
+            </div>
+        </a>
+    </aside>
+
+    <main class="conteudo-sistema">
+        <header class="topo-perfil">
+            <div></div>
+
+            <a href="{{ url_for('perfil') }}" class="usuario-logado">
+                {% if usuario[9] %}
+                    <img src="{{ url_for('static', filename='Uploads/' + usuario[9]) }}" alt="Foto do usuário">
+                {% else %}
+                    <img src="{{ url_for('static', filename='Uploads/perfil-usuario-topo.png') }}" alt="Foto padrão">
+                {% endif %}
+                <div>
+                    <strong>{{ usuario[0].split()[:2] | join(' ') }}</strong>
+                    <span>{{ usuario[1] }}</span>
+                </div>
+            </a>
+        </header>
+
+        <div class="linha-topo"></div>
+
+        <div class="caminho-categoria">
+            <a href="{{ url_for('movimentacao') }}">Cadastrar Movimentação</a>
+            <span>›</span>
+            <strong>Adicionar Categoria</strong>
+        </div>
+
+        <section class="titulo-categoria">
+            <h1>Adicionar Categoria</h1>
+        </section>
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensagem in mensagens %}
+                <p class="mensagem {{ categoria }}">{{ mensagem }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="card-categoria">
+            <div class="cabecalho-categoria">
+                <div class="icone-categoria">
+                    <img src="{{ url_for('static', filename='uploads/tag.png') }}" alt="">
+                </div>
+                <div>
+                    <h2>Adicionar Categoria</h2>
+                    <p>Preencha todos os dados necessários</p>
+                </div>
+            </div>
+
+            <form action="{{ url_for('cadastrar_categoria') }}" method="POST">
+                <div class="linha-categoria">
+
+                    <div class="grupo-categoria nome-categoria">
+                        <label>Nome da Categoria <span>*</span></label>
+                        <input type="text" name="nome_categoria" placeholder="Ex.: Academia" required>
+                    </div>
+
+                    <div class="grupo-categoria tipo-categoria">
+                        <label>Tipo <span>*</span></label>
+                        <select name="tipo" required>
+                            <option value="">Selecione</option>
+                            <option value="1">Despesa</option>
+                            <option value="2">Receita</option>
+                        </select>
+                    </div>
+
+                    <div class="grupo-categoria cor-categoria">
+                        <label>Cor</label>
+                        <input type="color" name="cor" value="#FFD400">
+                    </div>
+
+                    <div class="grupo-categoria icone-escolha">
+                        <label>Ícone <span>*</span></label>
+
+                        <details class="seletor-icone">
+                            <summary id="icone-selecionado">Selecione</summary>
+
+                            <div class="grade-icones">
+                                <label>
+                                    <input type="radio" name="icone" value="alert.svg" required onclick="mostrarIcone('Alerta')">
+                                    <img src="{{ url_for('static', filename='svg/alert.svg') }}" alt="Alerta">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="award.svg" onclick="mostrarIcone('Prêmio')">
+                                    <img src="{{ url_for('static', filename='svg/award.svg') }}" alt="Prêmio">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="book.svg" onclick="mostrarIcone('Livro')">
+                                    <img src="{{ url_for('static', filename='svg/book.svg') }}" alt="Livro">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="coffee.svg" onclick="mostrarIcone('Café')">
+                                    <img src="{{ url_for('static', filename='svg/coffee.svg') }}" alt="Café">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="gift.svg" onclick="mostrarIcone('Presente')">
+                                    <img src="{{ url_for('static', filename='svg/gift.svg') }}" alt="Presente">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="heart.svg" onclick="mostrarIcone('Coração')">
+                                    <img src="{{ url_for('static', filename='svg/heart.svg') }}" alt="Coração">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="home.svg" onclick="mostrarIcone('Casa')">
+                                    <img src="{{ url_for('static', filename='svg/home.svg') }}" alt="Casa">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="map pin.svg" onclick="mostrarIcone('Localização')">
+                                    <img src="{{ url_for('static', filename='svg/map pin.svg') }}" alt="Localização">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="monitor.svg" onclick="mostrarIcone('Monitor')">
+                                    <img src="{{ url_for('static', filename='svg/monitor.svg') }}" alt="Monitor">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="pacote.svg" onclick="mostrarIcone('Pacote')">
+                                    <img src="{{ url_for('static', filename='svg/pacote.svg') }}" alt="Pacote">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="printer.svg" onclick="mostrarIcone('Impressora')">
+                                    <img src="{{ url_for('static', filename='svg/printer.svg') }}" alt="Impressora">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="settings.svg" onclick="mostrarIcone('Configurações')">
+                                    <img src="{{ url_for('static', filename='svg/settings.svg') }}" alt="Configurações">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="bag.svg" onclick="mostrarIcone('Bolsa')">
+                                    <img src="{{ url_for('static', filename='svg/bag.svg') }}" alt="Bolsa">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="cart.svg" onclick="mostrarIcone('Carrinho')">
+                                    <img src="{{ url_for('static', filename='svg/cart.svg') }}" alt="Carrinho">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="smartphone.svg" onclick="mostrarIcone('Celular')">
+                                    <img src="{{ url_for('static', filename='svg/smartphone.svg') }}" alt="Celular">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="sorriso.svg" onclick="mostrarIcone('Sorriso')">
+                                    <img src="{{ url_for('static', filename='svg/sorriso.svg') }}" alt="Sorriso">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="star.svg" onclick="mostrarIcone('Estrela')">
+                                    <img src="{{ url_for('static', filename='svg/star.svg') }}" alt="Estrela">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="tool.svg" onclick="mostrarIcone('Ferramenta')">
+                                    <img src="{{ url_for('static', filename='svg/tool.svg') }}" alt="Ferramenta">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="truck.svg" onclick="mostrarIcone('Caminhão')">
+                                    <img src="{{ url_for('static', filename='svg/truck.svg') }}" alt="Caminhão">
+                                </label>
+
+                                <label>
+                                    <input type="radio" name="icone" value="relogio.svg" onclick="mostrarIcone('Relógio')">
+                                    <img src="{{ url_for('static', filename='svg/relogio.svg') }}" alt="Relógio">
+                                </label>
+                            </div>
+                        </details>
+                    </div>
+                </div>
+
+                <div class="botoes-categoria">
+                    <a href="{{ url_for('movimentacao') }}" class="cancelar-categoria">Cancelar</a>
+                    <button type="submit" class="salvar-categoria">Salvar</button>
+                </div>
+            </form>
+        </section>
+        <script>
+            function mostrarIcone(nome) {
+                document.getElementById('icone-selecionado').innerHTML = nome;
+            }
+        </script>
+    </main>
+
+</body>
+</html>

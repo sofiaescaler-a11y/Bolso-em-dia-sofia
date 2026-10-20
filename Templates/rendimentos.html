@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendimentos - Bolso em Dia</title>
+    <link rel="icon" href="{{ url_for('static', filename='uploads/logo-escuro.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/rendimentos.css') }}">
+</head>
+
+<body class="pagina-sistema">
+    <aside class="menu-lateral">
+        <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
+        <img class="logo-perfil" src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}" alt="Bolso em Dia">
+
+        <nav class="navegacao-perfil">
+            <a href="{{ url_for('dashboard') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('rendimentos') }}" class="pagina-ativa">
+                <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
+                <span>Rendimentos</span>
+            </a>
+
+            <a href="{{ url_for('despesas') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
+                <span>Despesas</span>
+            </a>
+
+            <a href="{{ url_for('dia_trabalhado') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}" alt="">
+                <span>Dia Trabalhado</span>
+            </a>
+
+            <a href="{{ url_for('servico_extra') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
+                <span>Serviço Extra</span>
+            </a>
+
+            <a href="{{ url_for('todas_categorias') }}">
+                <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
+                <span>Categorias</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-relatorios.png') }}" alt="">
+                <span>Relatórios</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-historico.png') }}" alt="">
+                <span>Histórico Semanal</span>
+            </a>
+        </nav>
+
+        <a class="sair-perfil" href="{{ url_for('logout') }}">
+            <div class="sair-conteudo">
+                <img src="{{ url_for('static', filename='uploads/perfil-sair.png') }}" alt="">
+                <span>Sair</span>
+            </div>
+        </a>
+    </aside>
+
+    <main class="conteudo-sistema">
+        <header class="topo-perfil">
+            <div></div>
+
+            <a href="{{ url_for('perfil') }}" class="usuario-logado">
+                {% if usuario[9] %}
+                    <img src="{{ url_for('static', filename='Uploads/' + usuario[9]) }}" alt="Foto do usuário">
+                {% else %}
+                    <img src="{{ url_for('static', filename='Uploads/perfil-usuario-topo.png') }}" alt="Foto padrão">
+                {% endif %}
+                <div>
+                    <strong>{{ usuario[0].split()[:2] | join(' ') }}</strong>
+                    <span>{{ usuario[1] }}</span>
+                </div>
+            </a>
+        </header>
+
+        <div class="linha-topo"></div>
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% for categoria, mensagem in mensagens %}
+                <p class="mensagem {{ categoria }}">{{ mensagem }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <div class="cabecalho-rendimentos">
+            <section class="titulo-rendimentos">
+                <p>Olá, {{ usuario[0].split()[:2] | join(' ') }}!</p>
+                <h1>Rendimentos</h1>
+                <p>Confira seus dias trabalhados, receitas e serviços extras.</p>
+            </section>
+
+            <details class="adicionar-rendimento">
+                <summary class="btn-adicionar-rendimento">
+                    <img src="{{ url_for('static', filename='uploads/icone-mais.png') }}" alt="">
+                    <span>Adicionar rendimento</span>
+                    <img src="{{ url_for('static', filename='uploads/chevron-baixo-branco.png') }}" alt="">
+                </summary>
+
+                <div class="opcoes-rendimento">
+                    <a href="{{ url_for('dia_trabalhado') }}">Dia Trabalhado</a>
+                    <a href="{{ url_for('movimentacao') }}">Receita</a>
+                    <a href="{{ url_for('servico_extra') }}">Serviço Extra</a>
+                </div>
+            </details>
+        </div>
+
+        <div class="filtros-rendimentos">
+            <button class="filtro ativo" type="button">Todos</button>
+            <button class="filtro" type="button">Receitas</button>
+            <button class="filtro" type="button">Dias Trabalhados</button>
+            <button class="filtro" type="button">Serviços Extras</button>
+        </div>
+
+        <section class="meus-rendimentos">
+            <h2>Meus Rendimentos</h2>
+
+            <div class="filtros-tabela">
+                <div class="campo-busca">
+                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/lupa-azul-escuro.png') }}" alt="">
+                    <input type="text" placeholder="Buscar rendimentos por descrição...">
+                </div>
+
+                <button class="filtro-tabela" type="button">
+                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/calendario-preto.png') }}" alt="">
+                    <span>Todos os meses</span>
+                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
+                </button>
+
+                <button class="filtro-tabela" type="button">
+                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/etiqueta-preta.png') }}" alt="">
+                    <span>Todas as categorias</span>
+                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
+                </button>
+
+                <button class="filtro-tabela ordenar" type="button">
+                    <span>Ordenar por data</span>
+                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
+                </button>
+            </div>
+
+            <div class="tabela-rendimentos-container">
+                <table class="tabela-rendimentos">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="th-ordenacao">
+                                    <span>Data</span>
+                                    <img class="setas" src="{{ url_for('static', filename='uploads/setas.png') }}" alt="">
+                                </div>
+                            </th>
+                            <th>Categoria</th>
+                            <th>Descrição</th>
+                            <th>
+                                <div class="th-ordenacao">
+                                    <span>Valor</span>
+                                    <img class="setas" src="{{ url_for('static', filename='uploads/setas.png') }}" alt="">
+                                </div>
+                            </th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabela-rendimentos">
+                        {% for rendimento in rendimentos|default([]) %}
+                            <tr>
+                                <td>{{ rendimento.data.strftime('%d/%m/%Y') }}</td>
+                                <td>{{ rendimento.categoria }}</td>
+                                <td>{{ rendimento.descricao }}</td>
+                                <td class="valor-rendimento">
+                                    {{ "R$ %.2f"|format(rendimento.valor) }}
+                                </td>
+                                <td>
+                                    <div class="acoes-rendimento">
+                                        {% if rendimento.tipo == 'movimentacao' %}
+                                            <a href="{{ url_for('editar_movimentacao', id=rendimento.id) }}"
+                                               title="Editar">
+                                                <img src="{{ url_for('static', filename='uploads/edit.png') }}"
+                                                     alt="Editar">
+                                            </a>
+
+                                            <form action="{{ url_for('inativar_movimentacao', id=rendimento.id) }}"
+                                                  method="POST">
+                                                <button type="submit" title="Inativar">
+                                                    Inativar
+                                                </button>
+                                            </form>
+
+                                            <form action="{{ url_for('excluir_movimentacao', id=rendimento.id) }}"
+                                                  method="POST"
+                                                  onsubmit="return confirm('Deseja realmente excluir esta receita?')">
+                                                <button type="submit" title="Excluir">
+                                                    Excluir
+                                                </button>
+                                            </form>
+
+                                        {% elif rendimento.tipo == 'servico_extra' %}
+                                            <a href="{{ url_for('editar_servico_extra', id=rendimento.id) }}"
+                                               title="Editar">
+                                                <img src="{{ url_for('static', filename='uploads/edit.png') }}"
+                                                     alt="Editar">
+                                            </a>
+
+                                            <form action="{{ url_for('inativar_servico_extra', id=rendimento.id) }}"
+                                                  method="POST">
+                                                <input type="hidden" name="ativar" value="0">
+                                                <button type="submit">Inativar</button>
+                                            </form>
+
+                                            <form action="{{ url_for('excluir_servico_extra', id=rendimento.id) }}"
+                                                  method="POST"
+                                                  onsubmit="return confirm('Deseja realmente excluir este serviço extra?')">
+                                                <button type="submit" title="Excluir">
+                                                    Excluir
+                                                </button>
+                                            </form>
+
+                                        {% elif rendimento.tipo == 'dia_trabalhado' %}
+                                            <a href="{{ url_for('editar_dia_trabalhado', id=rendimento.id) }}"
+                                               title="Editar">
+                                                <img src="{{ url_for('static', filename='uploads/edit.png') }}"
+                                                     alt="Editar">
+                                            </a>
+
+                                            <form action="{{ url_for('inativar_dia_trabalhado', id=rendimento.id) }}"
+                                                  method="POST">
+                                                <input type="hidden" name="ativar" value="0">
+                                                <button type="submit">Inativar</button>
+                                            </form>
+
+                                            <form action="{{ url_for('excluir_dia_trabalhado', id=rendimento.id) }}"
+                                                  method="POST"
+                                                  onsubmit="return confirm('Deseja realmente excluir este dia trabalhado?')">
+                                                <button type="submit" title="Excluir">
+                                                    Excluir
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

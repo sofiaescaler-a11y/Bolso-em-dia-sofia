@@ -1,31 +1,406 @@
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Início | Bolso em Dia</title>
+    <title>Início - Bolso em Dia</title>
+
     <link rel="icon" href="{{ url_for('static', filename='uploads/logo-escuro.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
 </head>
-<body>
-    <main>
+<body class="pagina-sistema">
+
+    <aside class="menu-lateral">
+        <!-- Volta para a dashboard. A seta aparece somente no mobile. -->
+        <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
+
+        <img class="logo-perfil"
+             src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}"
+             alt="Bolso em Dia">
+
+        <nav class="navegacao-perfil">
+            <a href="{{ url_for('dashboard') }}" class="pagina-ativa">
+                <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('rendimentos') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
+                <span>Rendimentos</span>
+            </a>
+
+            <a href="{{ url_for('despesas') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
+                <span>Despesas</span>
+            </a>
+
+            <a href="{{ url_for('dia_trabalhado') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}" alt="">
+                <span>Dia Trabalhado</span>
+            </a>
+
+            <a href="{{ url_for('servico_extra') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
+                <span>Serviço Extra</span>
+            </a>
+
+            <a href="{{ url_for('todas_categorias') }}">
+                <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
+                <span>Categorias</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-relatorios.png') }}" alt="">
+                <span>Relatórios</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-historico.png') }}" alt="">
+                <span>Histórico Semanal</span>
+            </a>
+        </nav>
+
+        <a class="sair-perfil" href="{{ url_for('logout') }}">
+            <div class="sair-conteudo">
+                <img src="{{ url_for('static', filename='uploads/perfil-sair.png') }}" alt="">
+                <span>Sair</span>
+            </div>
+        </a>
+    </aside>
+
+    <main class="conteudo-sistema">
+        <header class="topo-perfil">
+            <div></div>
+
+            <a href="{{ url_for('perfil') }}" class="usuario-logado">
+                {% if usuario[9] %}
+                    <img src="{{ url_for('static', filename='Uploads/' + usuario[9]) }}" alt="Foto do usuário">
+                {% else %}
+                    <img src="{{ url_for('static', filename='Uploads/perfil-usuario-topo.png') }}" alt="Foto padrão">
+                {% endif %}
+                <div>
+                    <strong>{{ usuario[0].split()[:2] | join(' ') }}</strong>
+                    <span>{{ usuario[1] }}</span>
+                </div>
+            </a>
+        </header>
+
+        <div class="linha-topo"></div>
+
         {% with mensagens = get_flashed_messages(with_categories=true) %}
             {% for categoria, mensagem in mensagens %}
                 <p class="mensagem {{ categoria }}">{{ mensagem }}</p>
             {% endfor %}
         {% endwith %}
 
-        <div class="saudacao">
+        <section class="titulo-dashboard">
             <!-- Exibe somente os dois primeiros nomes do usuário -->
-            <p>Olá, {{ usuario.split()[:2] | join(' ') }}!</p>
-            <p>Bem-vindo(a) ao Bolso em Dia.</p>
-        </div>
+            <p>Olá, {{ usuario[0].split()[:2] | join(' ') }}!</p>
+            <h1>Dashboard</h1>
+            <p>Acompanhe seus ganhos, despesas e progresso financeiro.</p>
+        </section>
 
-        <div class="botoes-dashboard">
-            <a href="{{ url_for('perfil') }}" class="botao botao-verde">Meu perfil</a>
-            <a href="{{ url_for('logout') }}" class="botao botao-vermelho">Sair</a>
-        </div>
+        <section class="cards-resumo">
+
+            <div class="card-resumo">
+                <div class="icone-resumo icone-verde">
+                    <img src="{{ url_for('static', filename='uploads/progresso-verde.png') }}" alt="">
+                </div>
+                <div class="informacoes-resumo">
+                    <p class="titulo-card">Ganho no ano</p>
+                    <h2 class="valor-card valor-verde">
+                        {{ "R$ %.2f"|format(ganho_ano) }}
+                    </h2>
+                    <div class="comparacao-card">
+                        {% if ganho_subiu %}
+                            <img src="{{ url_for('static', filename='uploads/seta-direita-cima-verde.png') }}" alt="">
+                            <strong class="porcentagem-verde">
+                                {{ ganho_percentual }}%
+                            </strong>
+                        {% else %}
+                            <img class="seta-baixo"
+                                 src="{{ url_for('static', filename='uploads/seta-direita-cima-vermelho.png') }}"
+                                 alt="">
+                            <strong class="porcentagem-vermelha">
+                                {{ ganho_percentual }}%
+                            </strong>
+                        {% endif %}
+                        <span>em relação ao ano anterior</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-resumo">
+                <div class="icone-resumo icone-vermelho">
+                    <img src="{{ url_for('static', filename='uploads/cartao-vermelho.png') }}" alt="">
+                </div>
+                <div class="informacoes-resumo">
+                    <p class="titulo-card">Despesas no ano</p>
+                    <h2 class="valor-card valor-vermelho">
+                        {{ "R$ %.2f"|format(despesas_ano) }}
+                    </h2>
+                    <div class="comparacao-card">
+                        {% if despesas_subiram %}
+                            <img src="{{ url_for('static', filename='uploads/seta-direita-cima-vermelho.png') }}" alt="">
+                            <strong class="porcentagem-vermelha">
+                                {{ despesas_percentual }}%
+                            </strong>
+                        {% else %}
+                            <img class="seta-baixo"
+                                 src="{{ url_for('static', filename='uploads/seta-direita-cima-verde.png') }}"
+                                 alt="">
+                            <strong class="porcentagem-verde">
+                                {{ despesas_percentual }}%
+                            </strong>
+                        {% endif %}
+                        <span>em relação ao ano anterior</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-resumo">
+                <div class="icone-resumo icone-verde">
+                    <img src="{{ url_for('static', filename='uploads/mala-verde.png') }}" alt="">
+                </div>
+                <div class="informacoes-resumo">
+                    <p class="titulo-card">Saldo atual</p>
+                    <h2 class="valor-card {% if saldo_negativo %}valor-vermelho{% else %}valor-verde{% endif %}">
+                        {{ "R$ %.2f"|format(saldo_atual) }}
+                    </h2>
+                    <div class="comparacao-card">
+                        {% if saldo_subiu %}
+                            <img src="{{ url_for('static', filename='uploads/seta-direita-cima-verde.png') }}" alt="">
+
+                            <strong class="porcentagem-verde">
+                                {{ saldo_percentual }}%
+                            </strong>
+                        {% else %}
+                            <img class="seta-baixo"
+                                 src="{{ url_for('static', filename='uploads/seta-direita-cima-vermelho.png') }}"
+                                 alt="">
+
+                            <strong class="porcentagem-vermelha">
+                                {{ saldo_percentual }}%
+                            </strong>
+                        {% endif %}
+                        <span>em relação ao ano anterior</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="card-grafico">
+            <div class="topo-grafico">
+
+                <div class="titulo-grafico">
+                    <div class="icone-grafico">
+                        <img src="{{ url_for('static', filename='uploads/progresso-verde.png') }}" alt="">
+                    </div>
+
+                    <h2>Ganhos por mês</h2>
+                </div>
+
+                <select class="filtro-ano">
+                    <option>Ano atual ({{ ano_atual }})</option>
+                </select>
+
+            </div>
+
+            <div class="area-grafico">
+                <canvas id="myChart"></canvas>
+            </div>
+
+        </section>
+        <section class="cards-dados">
+
+            <div class="card-dado">
+                <div class="icone-dado">
+                    <img src="{{ url_for('static', filename='uploads/calendar-verde.png') }}" alt="">
+                </div>
+
+                <div>
+                    <p>Dias trabalhados no ano</p>
+                    <h2>{{ dias_trabalhados_ano }}</h2>
+
+                    <div class="comparacao-card">
+                        {% if dias_subiram %}
+                            <img src="{{ url_for('static', filename='uploads/seta-direita-cima-verde.png') }}" alt="">
+                            <strong class="porcentagem-verde">{{ dias_percentual }}%</strong>
+                        {% else %}
+                            <img class="seta-baixo" src="{{ url_for('static', filename='uploads/seta-direita-cima-vermelho.png') }}" alt="">
+                            <strong class="porcentagem-vermelha">{{ dias_percentual }}%</strong>
+                        {% endif %}
+
+                        <span>em relação ao ano anterior</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-dado">
+                <div class="icone-dado">
+                    <img src="{{ url_for('static', filename='uploads/pacote-verde.png') }}" alt="">
+                </div>
+
+                <div>
+                    <p>Pacotes coletados no ano</p>
+                    <h2>{{ pacotes_ano }}</h2>
+
+                    <div class="comparacao-card">
+                        {% if pacotes_subiram %}
+                            <img src="{{ url_for('static', filename='uploads/seta-direita-cima-verde.png') }}" alt="">
+                            <strong class="porcentagem-verde">{{ pacotes_percentual }}%</strong>
+                        {% else %}
+                            <img class="seta-baixo" src="{{ url_for('static', filename='uploads/seta-direita-cima-vermelho.png') }}" alt="">
+                            <strong class="porcentagem-vermelha">{{ pacotes_percentual }}%</strong>
+                        {% endif %}
+
+                        <span>em relação ao ano anterior</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-dado">
+                <div class="icone-dado">
+                    <img src="{{ url_for('static', filename='uploads/progresso-verde.png') }}" alt="">
+                </div>
+
+                <div>
+                    <p>Média de ganho por dia</p>
+                    <h2>{{ "R$ %.2f"|format(media_ganho_dia) }}</h2>
+
+                    <div class="comparacao-card">
+                        {% if media_subiu %}
+                            <img src="{{ url_for('static', filename='uploads/seta-direita-cima-verde.png') }}" alt="">
+                            <strong class="porcentagem-verde">{{ media_percentual }}%</strong>
+                        {% else %}
+                            <img class="seta-baixo" src="{{ url_for('static', filename='uploads/seta-direita-cima-vermelho.png') }}" alt="">
+                            <strong class="porcentagem-vermelha">{{ media_percentual }}%</strong>
+                        {% endif %}
+
+                        <span>em relação ao ano anterior</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="cards-projecao">
+            <div class="card-projecao">
+                <div class="icone-dado">
+                    <img src="{{ url_for('static', filename='uploads/calendar-verde.png') }}" alt="">
+                </div>
+                <div>
+                    <p>Saldo projetado mensal</p>
+                    <h2>{{ "R$ %.2f"|format(saldo_projetado_mensal) }}</h2>
+                    <div class="comparacao-card">
+                        {% if projecao_subiu %}
+                            <img src="{{ url_for('static', filename='uploads/seta-direita-cima-verde.png') }}" alt="">
+
+                            <strong class="porcentagem-verde">
+                                {{ projecao_percentual }}%
+                            </strong>
+                        {% else %}
+                            <img class="seta-baixo"
+                                 src="{{ url_for('static', filename='uploads/seta-direita-cima-vermelho.png') }}"
+                                 alt="">
+
+                            <strong class="porcentagem-vermelha">
+                                {{ projecao_percentual }}%
+                            </strong>
+                        {% endif %}
+                        <span>em relação ao mês anterior</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-projecao">
+                <div class="icone-dado">
+                    <img src="{{ url_for('static', filename='uploads/target-verde.png') }}" alt="">
+                </div>
+                <div>
+                    <p>Saldo projetado anual</p>
+                    <h2>{{ "R$ %.2f"|format(saldo_projetado_anual) }}</h2>
+                    <div class="comparacao-card">
+                        {% if projecao_subiu %}
+                            <img src="{{ url_for('static', filename='uploads/seta-direita-cima-verde.png') }}" alt="">
+
+                            <strong class="porcentagem-verde">
+                                {{ projecao_percentual }}%
+                            </strong>
+                        {% else %}
+                            <img class="seta-baixo"
+                                 src="{{ url_for('static', filename='uploads/seta-direita-cima-vermelho.png') }}"
+                                 alt="">
+
+                            <strong class="porcentagem-vermelha">
+                                {{ projecao_percentual }}%
+                            </strong>
+                        {% endif %}
+                        <span>em relação ao mês anterior</span>
+                    </div>
+                </div>
+            </div>
+
+        </section>
     </main>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+    const ctx = document.getElementById('myChart');
+    const ganhosMensais = {{ ganhos_mensais | tojson }};
+
+    new Chart(ctx, {
+        type: 'bar',
+
+        data: {
+            labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+
+            datasets: [{
+                data: ganhosMensais,
+                backgroundColor: '#14A83B',
+                borderWidth: 0,
+                barThickness: 17
+            }]
+        },
+
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+
+            plugins: {
+                legend: {
+                    display: false
+                },
+
+                tooltip: {
+                    callbacks: {
+                        label: function(context) {
+                            return 'R$ ' + context.raw.toFixed(2);
+                        }
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true,
+
+                    ticks: {
+                        callback: function(valor) {
+                            return 'R$ ' + valor;
+                        }
+                    }
+                },
+
+                y: {
+                    grid: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
+</script>
+
 </body>
 </html>

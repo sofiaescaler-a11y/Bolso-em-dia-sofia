@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br" dir="ltr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Categorias - Bolso em Dia</title>
+    <link rel="icon" href="{{ url_for('static', filename='uploads/logo-escuro.png') }}" type="image/png">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/categorias.css') }}">
+</head>
+
+<body class="pagina-sistema">
+
+    <aside class="menu-lateral">
+        <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
+        <img class="logo-perfil" src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}"
+            alt="Bolso em Dia">
+
+        <nav class="navegacao-perfil">
+            <a href="{{ url_for('dashboard') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
+                <span>Dashboard</span>
+            </a>
+
+            <a href="{{ url_for('rendimentos') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
+                <span>Rendimentos</span>
+            </a>
+
+            <a href="{{ url_for('despesas') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
+                <span>Despesas</span>
+            </a>
+
+            <a href="{{ url_for('dia_trabalhado') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}" alt="">
+                <span>Dia Trabalhado</span>
+            </a>
+
+            <a href="{{ url_for('servico_extra') }}">
+                <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
+                <span>Serviço Extra</span>
+            </a>
+
+            <a href="{{ url_for('todas_categorias') }}" class="pagina-ativa">
+                <img src="{{ url_for('static', filename='uploads/tag.png') }}" alt="">
+                <span>Categorias</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-relatorios.png') }}" alt="">
+                <span>Relatórios</span>
+            </a>
+
+            <a href="#">
+                <img src="{{ url_for('static', filename='uploads/perfil-historico.png') }}" alt="">
+                <span>Histórico Semanal</span>
+            </a>
+        </nav>
+
+        <a class="sair-perfil" href="{{ url_for('logout') }}">
+            <div class="sair-conteudo">
+                <img src="{{ url_for('static', filename='uploads/perfil-sair.png') }}" alt="">
+                <span>Sair</span>
+            </div>
+        </a>
+    </aside>
+
+    <main class="conteudo-sistema">
+        <header class="topo-perfil">
+            <div></div>
+
+            <a href="{{ url_for('perfil') }}" class="usuario-logado">
+                {% if usuario[9] %}
+                <img src="{{ url_for('static', filename='Uploads/' + usuario[9]) }}" alt="Foto do usuário">
+                {% else %}
+                <img src="{{ url_for('static', filename='Uploads/perfil-usuario-topo.png') }}" alt="Foto padrão">
+                {% endif %}
+                <div>
+                    <strong>{{ usuario[0].split()[:2] | join(' ') }}</strong>
+                    <span>{{ usuario[1] }}</span>
+                </div>
+            </a>
+        </header>
+
+        <div class="linha-topo"></div>
+
+        <section class="titulo-categorias">
+            <p>Olá, {{ usuario[0].split()[:2] | join(' ') }}!</p>
+            <h1>Categorias</h1>
+            <p>Visualize suas categorias cadastradas.</p>
+        </section>
+
+        {% with mensagens = get_flashed_messages(with_categories=true) %}
+            {% for categoria_mensagem, mensagem in mensagens %}
+                <p class="mensagem {{ categoria_mensagem }}">{{ mensagem }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <section class="card-categorias">
+            <div class="topo-categorias">
+                <div class="cabecalho-categorias">
+                    <div class="icone-categorias">
+                        <img src="{{ url_for('static', filename='uploads/tag.png') }}" alt="">
+                    </div>
+                    <div>
+                        <h2>Minhas Categorias</h2>
+                        <p>Gerencie suas categorias cadastradas.</p>
+                    </div>
+                </div>
+
+                <a href="{{ url_for('nova_categoria') }}" class="nova-categoria">
+                    + Nova Categoria
+                </a>
+            </div>
+
+            <div class="filtros-categorias">
+                <div class="filtro-categoria">
+                    <label>Buscar categoria</label>
+                    <input type="text" id="buscar-categoria" placeholder="Digite o nome da categoria">
+                </div>
+
+                <div class="filtro-categoria">
+                    <label>Tipo</label>
+                    <select id="filtro-tipo">
+                        <option value="todos">Todos</option>
+                        <option value="1">Despesa</option>
+                        <option value="2">Receita</option>
+                    </select>
+                </div>
+
+                <div class="filtro-categoria">
+                    <label>Status</label>
+                    <select id="filtro-status">
+                        <option value="todos">Todos</option>
+                        <option value="1">Ativa</option>
+                        <option value="0">Inativa</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div class="lista-categorias">
+                {% if categoria %}
+                {% for item in categoria %}
+                <div class="item-categoria" data-nome="{{ item[1] }}" data-tipo="{{ item[2] }}"
+                    data-status="{{ item[5] }}">
+
+                    <div class="informacoes-categoria">
+
+                        <div class="icone-item-categoria" style="background-color: #{{ item[3] }}50;">
+                            {% if item[1] == 'Dia Trabalhado' %}
+                            <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}"
+                                alt="Dia Trabalhado">
+                            {% elif item[4] %}
+                            <img src="{{ url_for('static', filename='svg/' + item[4]) }}" alt="">
+                            {% else %}
+                            <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
+                            {% endif %}
+                        </div>
+
+                        <div class="dados-categoria">
+                            <div class="nome-tipo-categoria">
+                                <strong>{{ item[1] }}</strong>
+
+                                {% if item[2] == 1 %}
+                                <span class="tipo-categoria despesa">Despesa</span>
+                                {% elif item[2] == 2 %}
+                                <span class="tipo-categoria receita">Receita</span>
+                                {% endif %}
+                            </div>
+
+                            {% if item[5] == 1 %}
+                            <span class="status-categoria ativo">Ativa</span>
+                            {% else %}
+                            <span class="status-categoria inativo">Inativa</span>
+                            {% endif %}
+                        </div>
+
+                    </div>
+
+                    <div class="acoes-categoria">
+
+                        {% if item[0] not in [1, 2] %}
+
+                        {% if item[5] == 1 %}
+                        <a href="{{ url_for('editar_categoria', id=item[0]) }}" class="editar-categoria">
+                            <img src="{{ url_for('static', filename='uploads/edit.png') }}" alt="">
+                            Editar
+                        </a>
+                        {% endif %}
+
+                        <form action="{{ url_for('inativar_categoria', id=item[0]) }}" method="POST">
+
+                            {% if item[5] == 1 %}
+                            <input type="hidden" name="ativar" value="0">
+                            <button type="submit" class="inativar-categoria">Inativar</button>
+                            {% else %}
+                            <input type="hidden" name="ativar" value="1">
+                            <button type="submit" class="ativar-categoria">Ativar</button>
+                            {% endif %}
+
+                        </form>
+
+                        {% else %}
+                        <span class="categoria-padrao">Padrão</span>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+                {% endfor %}
+                {% else %}
+                <div class="sem-categorias">
+                    <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
+                    <h3>Nenhuma categoria encontrada</h3>
+                    <p>Cadastre uma categoria para começar.</p>
+                    <a href="{{ url_for('nova_categoria') }}">Adicionar Categoria</a>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/filtro.js') }}"></script>
+
+</body>
+
+</html>

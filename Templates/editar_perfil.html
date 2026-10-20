@@ -38,7 +38,7 @@
                     <span>Dia Trabalhado</span>
                 </a>
 
-                <a href="#">
+                <a href="{{ url_for('servico_extra') }}">
                     <img src="static/uploads/perfil-servico-extra.png" alt="">
                     <span>Serviço Extra</span>
                 </a>
@@ -54,9 +54,11 @@
                 </a>
             </nav>
 
-            <a class="sair-perfil"  href="{{ url_for('logout') }}">
-                <img src="static/uploads/perfil-sair.png" alt="">
-                <span>Sair</span>
+            <a class="sair-perfil" href="{{ url_for('logout') }}">
+                <div class="sair-conteudo">
+                    <img src="{{ url_for('static', filename='uploads/perfil-sair.png') }}" alt="">
+                    <span>Sair</span>
+                </div>
             </a>
         </aside>
 
