@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br" dir="ltr">
 <head>
@@ -9,7 +10,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_servico_extra.css') }}">
 </head>
 <body class="pagina-sistema">
-
     <aside class="menu-lateral">
         <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
         <img class="logo-perfil" src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}" alt="Bolso em Dia">
@@ -100,6 +100,7 @@
                 <div class="icone-servico">
                     <img src="{{ url_for('static', filename='uploads/calendar-verde.png') }}" alt="">
                 </div>
+
                 <div>
                     <h2>Registrar Serviço Extra</h2>
                     <p>Preencha as informações abaixo para registrar um serviço extra.</p>
@@ -118,7 +119,7 @@
 
                         <div class="campo-valor">
                             <strong>R$</strong>
-                            <input type="number" name="valor" min="0.01" step="0.01" placeholder="0,00" required>
+                            <input type="text" name="valor" id="valor" inputmode="numeric" placeholder="0,00" required>
                         </div>
                     </div>
 
@@ -126,44 +127,59 @@
                         <label>Data <span>*</span></label>
 
                         <div class="campo-data">
-                            <div class="icone-campo">
+                            <div class="icone-campo" onclick="document.getElementById('data-servico').showPicker()" style="cursor: pointer;">
                                 <img src="{{ url_for('static', filename='uploads/calendar-cinza.png') }}" alt="">
                             </div>
-                            <input type="date" name="data" required>
+                            <input type="date" name="data" id="data-servico" required>
                         </div>
+
                     </div>
                 </div>
 
                 <div class="grupo-descricao">
-                    <label>Descrição do serviço <span>*</span></label>
+                    <label>Descrição da receita <span>*</span></label>
 
                     <div class="campo-descricao">
                         <img class="icone-descricao" src="{{ url_for('static', filename='uploads/document-cinza.png') }}" alt="">
                         <textarea name="descricao" maxlength="500" placeholder="Descreva os detalhes do serviço extra..."></textarea>
-                        <span class="contador-descricao">0/500</span>
+                        <span class="contador-descricao">0/250</span>
                     </div>
                 </div>
 
                 <div class="botoes-servico">
-                    <a href="{{ url_for('dashboard') }}" class="cancelar-servico">Cancelar</a>
+                    <a href="{{ url_for('rendimentos') }}" class="cancelar-servico">Cancelar</a>
                     <button type="submit" class="registrar-servico">Registrar</button>
                 </div>
             </form>
         </section>
     </main>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+
     <script>
-        // pega o campo de descrição
-        const descricao = document.querySelector('textarea');
+        {# máscara para deixar o input do valor com 0,00 #}
+        $("#valor").maskMoney({
+            thousands: ".",
+            decimal: ",",
+            precision: 2,
+            allowNegative: false,
+            allowZero: false
+        })
 
-        // pega o contador de caracteres
-        const contador = document.querySelector('.contador-descricao');
+        $("#valor").closest("form").on("submit", function() {
+            var valor = $("#valor").maskMoney("unmasked")[0]
+            $("#valor").val(valor.toFixed(2))
+        })
 
-        // atualiza o contador enquanto o usuário digita
+        const descricao = document.querySelector('textarea')
+        const contador = document.querySelector('.contador-descricao')
+
+
+        // Atualiza o contador conforme o usuário digita na descrição
         descricao.addEventListener('input', function() {
-            contador.textContent = descricao.value.length + '/500';
-        });
+            contador.textContent = descricao.value.length + '/250'
+        })
     </script>
-
 </body>
 </html>

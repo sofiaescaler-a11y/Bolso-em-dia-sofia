@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/dia_trabalhado.css') }}">
 </head>
-
 <body class="pagina-sistema">
     <aside class="menu-lateral">
         <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
@@ -19,37 +18,30 @@
                 <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
                 <span>Dashboard</span>
             </a>
-
             <a href="{{ url_for('rendimentos') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
                 <span>Rendimentos</span>
             </a>
-
-            <a href="{{ url_for('despesas') }}" >
+            <a href="{{ url_for('despesas') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
                 <span>Despesas</span>
             </a>
-
             <a href="{{ url_for('dia_trabalhado') }}" class="pagina-ativa">
                 <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}" alt="">
                 <span>Dia Trabalhado</span>
             </a>
-
             <a href="{{ url_for('servico_extra') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
                 <span>Serviço Extra</span>
             </a>
-
             <a href="{{ url_for('todas_categorias') }}">
                 <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
                 <span>Categorias</span>
             </a>
-
             <a href="#">
                 <img src="{{ url_for('static', filename='uploads/perfil-relatorios.png') }}" alt="">
                 <span>Relatórios</span>
             </a>
-
             <a href="#">
                 <img src="{{ url_for('static', filename='uploads/perfil-historico.png') }}" alt="">
                 <span>Histórico Semanal</span>
@@ -100,6 +92,7 @@
                 <div class="icone-dia">
                     <img src="{{ url_for('static', filename='uploads/calendar-verde.png') }}" alt="">
                 </div>
+
                 <div>
                     <h2>Registrar Dia Trabalhado</h2>
                     <p>Preencha as informações abaixo para registrar o dia trabalhado.</p>
@@ -109,7 +102,11 @@
             <form action="{{ url_for('cadastrar_dia_trabalhado') }}" method="POST">
                 <div class="grupo-dia">
                     <label>Data <span>*</span></label>
-                    <input type="date" name="data" required>
+
+                    <div class="campo-data">
+                        <input type="date" name="data" required>
+                        <img src="{{ url_for('static', filename='uploads/calendario-azul-escuro.png') }}" alt="">
+                    </div>
                 </div>
 
                 <div class="grupo-dia">
@@ -122,7 +119,7 @@
                 </div>
 
                 <div class="botoes-dia">
-                    <a href="{{ url_for('dashboard') }}" class="cancelar-dia">Cancelar</a>
+                    <a href="{{ url_for('rendimentos') }}" class="cancelar-dia">Cancelar</a>
                     <button type="submit" class="registrar-dia">Registrar</button>
                 </div>
             </form>

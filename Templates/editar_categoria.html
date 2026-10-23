@@ -1,65 +1,51 @@
-
 <!DOCTYPE html>
 <html lang="pt-br" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Categoria - Bolso em Dia</title>
-
     <link rel="icon" href="{{ url_for('static', filename='uploads/logo-escuro.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/nova_categoria.css') }}">
 </head>
-
 <body class="pagina-sistema">
-
     <aside class="menu-lateral">
         <a href="{{ url_for('movimentacao') }}" class="seta-voltar">‹</a>
-
         <img class="logo-perfil" src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}" alt="Bolso em Dia">
-
         <nav class="navegacao-perfil">
             <a href="{{ url_for('dashboard') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
                 <span>Dashboard</span>
             </a>
-
             <a href="{{ url_for('rendimentos') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
                 <span>Rendimentos</span>
             </a>
-
             <a href="{{ url_for('despesas') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
                 <span>Despesas</span>
             </a>
-
             <a href="{{ url_for('dia_trabalhado') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}" alt="">
                 <span>Dia Trabalhado</span>
             </a>
-
             <a href="{{ url_for('servico_extra') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
                 <span>Serviço Extra</span>
             </a>
-
             <a href="{{ url_for('todas_categorias') }}" class="pagina-ativa">
                 <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
                 <span>Categorias</span>
             </a>
-
             <a href="#">
                 <img src="{{ url_for('static', filename='uploads/perfil-relatorios.png') }}" alt="">
                 <span>Relatórios</span>
             </a>
-
             <a href="#">
                 <img src="{{ url_for('static', filename='uploads/perfil-historico.png') }}" alt="">
                 <span>Histórico Semanal</span>
             </a>
         </nav>
-
         <a class="sair-perfil" href="{{ url_for('logout') }}">
             <div class="sair-conteudo">
                 <img src="{{ url_for('static', filename='uploads/perfil-sair.png') }}" alt="">
@@ -67,256 +53,162 @@
             </div>
         </a>
     </aside>
-
     <main class="conteudo-sistema">
-
         <header class="topo-perfil">
             <div></div>
-
             <a href="{{ url_for('perfil') }}" class="usuario-logado">
                 {% if usuario[9] %}
                     <img src="{{ url_for('static', filename='Uploads/' + usuario[9]) }}" alt="Foto do usuário">
                 {% else %}
                     <img src="{{ url_for('static', filename='Uploads/perfil-usuario-topo.png') }}" alt="Foto padrão">
                 {% endif %}
-
                 <div>
                     <strong>{{ usuario[0].split()[:2] | join(' ') }}</strong>
                     <span>{{ usuario[1] }}</span>
                 </div>
             </a>
         </header>
-
         <div class="linha-topo"></div>
-
-        <div class="caminho-categoria">
-            <a href="{{ url_for('movimentacao') }}">Cadastrar Movimentação</a>
-            <span>›</span>
-            <strong>Editar Categoria</strong>
-        </div>
-
         <section class="titulo-categoria">
             <h1>Editar Categoria</h1>
         </section>
-
         {% with mensagens = get_flashed_messages(with_categories=true) %}
             {% for categoria_msg, mensagem in mensagens %}
                 <p class="mensagem {{ categoria_msg }}">{{ mensagem }}</p>
             {% endfor %}
         {% endwith %}
-
         <section class="card-categoria">
-
             <div class="cabecalho-categoria">
                 <div class="icone-categoria">
                     <img src="{{ url_for('static', filename='uploads/tag.png') }}" alt="">
                 </div>
-
                 <div>
                     <h2>Editar Categoria</h2>
                     <p>Altere os dados da categoria</p>
                 </div>
             </div>
-
             <form action="{{ url_for('editar_categoria', id=request.view_args['id']) }}" method="POST">
-
                 <div class="linha-categoria">
-
                     <div class="grupo-categoria nome-categoria">
-                        <label>Nome da Categoria <span>*</span></label>
-
-                        <input
-                            type="text"
-                            name="nome_categoria"
-                            placeholder="Ex.: Academia"
-                            value="{{ categoria[0] }}"
-                            required
-                        >
+                        <label>Nome da Categoria</label>
+                        <input type="text" name="nome_categoria" placeholder="Ex.: Academia" value="{{ categoria[0] }}" required>
                     </div>
-
                     <div class="grupo-categoria tipo-categoria">
-                        <label>Tipo <span>*</span></label>
-
+                        <label>Tipo</label>
                         <select name="tipo" required>
                             <option value="">Selecione</option>
-
-                            <option value="1" {% if categoria[1] == 1 %}selected{% endif %}>
-                                Despesa
-                            </option>
-
-                            <option value="2" {% if categoria[1] == 2 %}selected{% endif %}>
-                                Receita
-                            </option>
+                            <option value="1" {% if categoria[1] == 1 %}selected{% endif %}>Despesa</option>
+                            <option value="2" {% if categoria[1] == 2 %}selected{% endif %}>Receita</option>
                         </select>
                     </div>
-
                     <div class="grupo-categoria cor-categoria">
                         <label>Cor</label>
-
-                        <input
-                            type="color"
-                            name="cor"
-                            value="#{{ categoria[2] }}"
-                        >
+                        <input type="color" name="cor" value="#{{ categoria[2] }}">
                     </div>
-
                     <div class="grupo-categoria icone-escolha">
-                        <label>Ícone <span>*</span></label>
-
+                        <label>Ícone</label>
                         <details class="seletor-icone">
-
                             <summary id="icone-selecionado">
-                                {% set nomes_icones = {
-                                    'alert.svg': 'Alerta',
-                                    'award.svg': 'Prêmio',
-                                    'book.svg': 'Livro',
-                                    'coffee.svg': 'Café',
-                                    'gift.svg': 'Presente',
-                                    'heart.svg': 'Coração',
-                                    'home.svg': 'Casa',
-                                    'map pin.svg': 'Localização',
-                                    'monitor.svg': 'Monitor',
-                                    'pacote.svg': 'Pacote',
-                                    'printer.svg': 'Impressora',
-                                    'settings.svg': 'Configurações',
-                                    'bag.svg': 'Bolsa',
-                                    'cart.svg': 'Carrinho',
-                                    'smartphone.svg': 'Celular',
-                                    'sorriso.svg': 'Sorriso',
-                                    'star.svg': 'Estrela',
-                                    'tool.svg': 'Ferramenta',
-                                    'truck.svg': 'Caminhão',
-                                    'relogio.svg': 'Relógio'
-                                } %}
+                                {% set nomes_icones = {'alert.svg': 'Alerta','award.svg': 'Prêmio','book.svg': 'Livro','coffee.svg': 'Café','gift.svg': 'Presente','heart.svg': 'Coração','home.svg': 'Casa','map pin.svg': 'Localização','monitor.svg': 'Monitor','pacote.svg': 'Pacote','printer.svg': 'Impressora','settings.svg': 'Configurações','bag.svg': 'Bolsa','cart.svg': 'Carrinho','smartphone.svg': 'Celular','sorriso.svg': 'Sorriso','star.svg': 'Estrela','tool.svg': 'Ferramenta','truck.svg': 'Caminhão','relogio.svg': 'Relógio'} %}
                                 {{ nomes_icones.get(categoria[3], 'Selecione') }}
                             </summary>
-
                             <div class="grade-icones">
-
                                 <label>
                                     <input type="radio" name="icone" value="alert.svg" required {% if categoria[3] == "alert.svg" %}checked{% endif %} onclick="mostrarIcone('Alerta')">
                                     <img src="{{ url_for('static', filename='svg/alert.svg') }}" alt="Alerta">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="award.svg" {% if categoria[3] == "award.svg" %}checked{% endif %} onclick="mostrarIcone('Prêmio')">
                                     <img src="{{ url_for('static', filename='svg/award.svg') }}" alt="Prêmio">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="book.svg" {% if categoria[3] == "book.svg" %}checked{% endif %} onclick="mostrarIcone('Livro')">
                                     <img src="{{ url_for('static', filename='svg/book.svg') }}" alt="Livro">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="coffee.svg" {% if categoria[3] == "coffee.svg" %}checked{% endif %} onclick="mostrarIcone('Café')">
                                     <img src="{{ url_for('static', filename='svg/coffee.svg') }}" alt="Café">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="gift.svg" {% if categoria[3] == "gift.svg" %}checked{% endif %} onclick="mostrarIcone('Presente')">
                                     <img src="{{ url_for('static', filename='svg/gift.svg') }}" alt="Presente">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="heart.svg" {% if categoria[3] == "heart.svg" %}checked{% endif %} onclick="mostrarIcone('Coração')">
                                     <img src="{{ url_for('static', filename='svg/heart.svg') }}" alt="Coração">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="home.svg" {% if categoria[3] == "home.svg" %}checked{% endif %} onclick="mostrarIcone('Casa')">
                                     <img src="{{ url_for('static', filename='svg/home.svg') }}" alt="Casa">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="map pin.svg" {% if categoria[3] == "map pin.svg" %}checked{% endif %} onclick="mostrarIcone('Localização')">
                                     <img src="{{ url_for('static', filename='svg/map pin.svg') }}" alt="Localização">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="monitor.svg" {% if categoria[3] == "monitor.svg" %}checked{% endif %} onclick="mostrarIcone('Monitor')">
                                     <img src="{{ url_for('static', filename='svg/monitor.svg') }}" alt="Monitor">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="pacote.svg" {% if categoria[3] == "pacote.svg" %}checked{% endif %} onclick="mostrarIcone('Pacote')">
                                     <img src="{{ url_for('static', filename='svg/pacote.svg') }}" alt="Pacote">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="printer.svg" {% if categoria[3] == "printer.svg" %}checked{% endif %} onclick="mostrarIcone('Impressora')">
                                     <img src="{{ url_for('static', filename='svg/printer.svg') }}" alt="Impressora">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="settings.svg" {% if categoria[3] == "settings.svg" %}checked{% endif %} onclick="mostrarIcone('Configurações')">
                                     <img src="{{ url_for('static', filename='svg/settings.svg') }}" alt="Configurações">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="bag.svg" {% if categoria[3] == "bag.svg" %}checked{% endif %} onclick="mostrarIcone('Bolsa')">
                                     <img src="{{ url_for('static', filename='svg/bag.svg') }}" alt="Bolsa">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="cart.svg" {% if categoria[3] == "cart.svg" %}checked{% endif %} onclick="mostrarIcone('Carrinho')">
                                     <img src="{{ url_for('static', filename='svg/cart.svg') }}" alt="Carrinho">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="smartphone.svg" {% if categoria[3] == "smartphone.svg" %}checked{% endif %} onclick="mostrarIcone('Celular')">
                                     <img src="{{ url_for('static', filename='svg/smartphone.svg') }}" alt="Celular">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="sorriso.svg" {% if categoria[3] == "sorriso.svg" %}checked{% endif %} onclick="mostrarIcone('Sorriso')">
                                     <img src="{{ url_for('static', filename='svg/sorriso.svg') }}" alt="Sorriso">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="star.svg" {% if categoria[3] == "star.svg" %}checked{% endif %} onclick="mostrarIcone('Estrela')">
                                     <img src="{{ url_for('static', filename='svg/star.svg') }}" alt="Estrela">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="tool.svg" {% if categoria[3] == "tool.svg" %}checked{% endif %} onclick="mostrarIcone('Ferramenta')">
                                     <img src="{{ url_for('static', filename='svg/tool.svg') }}" alt="Ferramenta">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="truck.svg" {% if categoria[3] == "truck.svg" %}checked{% endif %} onclick="mostrarIcone('Caminhão')">
                                     <img src="{{ url_for('static', filename='svg/truck.svg') }}" alt="Caminhão">
                                 </label>
-
                                 <label>
                                     <input type="radio" name="icone" value="relogio.svg" {% if categoria[3] == "relogio.svg" %}checked{% endif %} onclick="mostrarIcone('Relógio')">
                                     <img src="{{ url_for('static', filename='svg/relogio.svg') }}" alt="Relógio">
                                 </label>
-
                             </div>
                         </details>
                     </div>
                 </div>
-
                 <div class="botoes-categoria">
-                    <a href="{{ url_for('movimentacao') }}" class="cancelar-categoria">
-                        Cancelar
-                    </a>
-
-                    <button type="submit" class="salvar-categoria">
-                        Salvar Alterações
-                    </button>
+                    <a href="{{ url_for('dashboard') }}" class="cancelar-categoria">Cancelar</a>
+                    <button type="submit" class="salvar-categoria">Salvar Alterações</button>
                 </div>
-
             </form>
         </section>
-
         <script>
             function mostrarIcone(nome) {
-                document.getElementById('icone-selecionado').innerHTML = nome;
+                // Exibe o nome do ícone escolhido
+                document.getElementById('icone-selecionado').innerHTML = nome
             }
         </script>
-
     </main>
 </body>
 </html>

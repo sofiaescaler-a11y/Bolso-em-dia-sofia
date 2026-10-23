@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, flash, session
 from datetime import datetime
 import fdb
 
@@ -17,7 +17,7 @@ app = Flask(__name__, static_folder='Static', template_folder='Templates', stati
 app.config['SECRET_KEY'] = 'chave_secreta_bolso_em_dia'
 
 host = "localhost"
-database = r"C:\Users\User\Downloads\bolso-em-dia-main (3)\bolso-em-dia-main\BANCO.FDB"
+database = r"C:\Users\Aluno\Downloads\bolso-em-dia-main (2)\bolso-em-dia-main\BANCO.FDB"
 user = "sysdba"
 password = "sysdba"
 
@@ -206,11 +206,11 @@ def login():
     cursor = con.cursor()
 
     try:
-
-        if len(login) > 15:
+        if '@' in login:
             cursor.execute("""SELECT ID_USUARIO, SENHA, COALESCE(STATUS, 1), COALESCE(TENTATIVAS, 0) FROM USUARIO WHERE upper(EMAIL) = ?""", (login.upper(),))
         else:
-            cursor.execute("""SELECT ID_USUARIO, SENHA, COALESCE(STATUS, 1), COALESCE(TENTATIVAS, 0) FROM USUARIO WHERE upper(EMAIL) = ? OR CPF = ? OR TELEFONE = ?""", (login.upper(), login, login,))
+            login = login.replace("(", "").replace(")", "").replace("-", "").replace(".", "").replace(" ", "")
+            cursor.execute("""SELECT ID_USUARIO, SENHA, COALESCE(STATUS, 1), COALESCE(TENTATIVAS, 0) FROM USUARIO WHERE CPF = ? OR TELEFONE = ?""", (login, login,))
 
         usuario = cursor.fetchone()
 
@@ -288,7 +288,7 @@ def dashboard():
 
     try:
         usuario = buscar_dados(id_usuario)
-
+    #variaves importantes
         valor_diaria = float(usuario[6] or 0)
         adicional = float(usuario[7] or 0)
         min_pacotes = int(usuario[8] or 0)
@@ -311,22 +311,44 @@ def dashboard():
         ganhos_mensais = [0] * 12
         despesas_mensais = [0] * 12
 
+        anos_registrados = [ano_atual] #Depois ele vai pegando cada ano que foi cadastrando e adicionando na lista
+        ganhos_por_ano = {} #Guarda os ganhos de cada ano.
+        despesas_por_ano = {} #Guarda as despesas de cada ano.
+        dias_por_ano = {} #Guarda a quantidade de dias trabalhados em cada ano.
+        pacotes_por_ano = {} #Guarda a quantidade de pacotes coletados em cada ano.
+
         cursor.execute("""SELECT DATA_TRABALHO, PACOTES_COLETADOS FROM DIA_TRABALHADO WHERE ID_USUARIO = ? AND STATUS = 1""", (id_usuario,))
         dias_trabalhados = cursor.fetchall()
 
         for dia in dias_trabalhados:
             data_trabalho = dia[0]
             pacotes = dia[1] or 0
+            ano = data_trabalho.year
 
-            if data_trabalho.year == ano_atual:
-                dias_trabalhados_ano += 1
-                pacotes_ano += pacotes
+            if ano not in anos_registrados:
+                anos_registrados.append(ano)
 
-            elif data_trabalho.year == ano_anterior:
-                dias_trabalhados_anterior += 1
-                pacotes_anterior += pacotes
+            if ano not in dias_por_ano:
+                dias_por_ano[ano] = 0
 
-        cursor.execute("""SELECT DATA_MOVIMENTACAO, VALOR, TIPO FROM MOVIMENTACAO WHERE ID_USUARIO = ? AND STATUS = 1""", (id_usuario,))
+            if ano not in pacotes_por_ano:
+                pacotes_por_ano[ano] = 0
+
+            dias_por_ano[ano] += 1
+            pacotes_por_ano[ano] += pacotes
+
+        cursor.execute("""
+            SELECT
+                COALESCE(D.DATA_TRABALHO, S.DATA_SERVICO, M.DATA_MOVIMENTACAO),
+                M.VALOR,
+                M.TIPO
+            FROM MOVIMENTACAO M
+            LEFT JOIN DIA_TRABALHADO D
+            ON D.ID_DIA_TRABALHADO = M.ID_DIA_TRABALHADO
+            LEFT JOIN SERVICO_EXTRA S
+            ON S.ID_SERVICO_EXTRA = M.ID_SERVICO_EXTRA
+            WHERE M.ID_USUARIO = ? AND M.STATUS = 1
+        """, (id_usuario,))
         movimentacoes = cursor.fetchall()
 
         for movimentacao in movimentacoes:
@@ -334,110 +356,219 @@ def dashboard():
             valor = float(movimentacao[1] or 0)
             tipo = movimentacao[2]
 
-            if data_movimentacao.year == ano_atual:
+            ano_movimentacao = data_movimentacao.year
+            mes = data_movimentacao.month - 1
 
-                if tipo == 1:
-                    despesas_ano += valor
+            if ano_movimentacao not in anos_registrados:
+                anos_registrados.append(ano_movimentacao)
 
-                    mes = data_movimentacao.month - 1
-                    despesas_mensais[mes] += valor
+            if ano_movimentacao not in ganhos_por_ano:
+                ganhos_por_ano[ano_movimentacao] = [0] * 12
 
-                elif tipo == 2:
-                    ganho_ano += valor
+            if ano_movimentacao not in despesas_por_ano:
+                despesas_por_ano[ano_movimentacao] = [0] * 12
 
-                    mes = data_movimentacao.month - 1
-                    ganhos_mensais[mes] += valor
+            if tipo == 1:
+                despesas_por_ano[ano_movimentacao][mes] += valor
 
-            elif data_movimentacao.year == ano_anterior:
+            elif tipo == 2:
+                ganhos_por_ano[ano_movimentacao][mes] += valor
 
-                if tipo == 1:
-                    despesas_anterior += valor
+        for ano in anos_registrados:
+            if ano not in ganhos_por_ano:
+                ganhos_por_ano[ano] = [0] * 12
 
-                elif tipo == 2:
-                    ganho_anterior += valor
+            if ano not in despesas_por_ano:
+                despesas_por_ano[ano] = [0] * 12
 
+            if ano not in dias_por_ano:
+                dias_por_ano[ano] = 0
 
-        saldo_atual = ganho_ano - despesas_ano
-        saldo_anterior = ganho_anterior - despesas_anterior
+            if ano not in pacotes_por_ano:
+                pacotes_por_ano[ano] = 0
 
+        anos_registrados.sort(reverse=True)
 
-        if dias_trabalhados_ano > 0:
-            media_ganho_dia = ganho_ano / dias_trabalhados_ano
-        else:
-            media_ganho_dia = 0
+        dados_por_ano = {}
 
-        if dias_trabalhados_anterior > 0:
-            media_ganho_dia_anterior = ganho_anterior / dias_trabalhados_anterior
-        else:
-            media_ganho_dia_anterior = 0
+        for ano in anos_registrados:
+            ano_anterior_selecionado = ano - 1
 
+            ganhos_ano_selecionado = ganhos_por_ano.get(ano, [0] * 12)
+            despesas_ano_selecionado = despesas_por_ano.get(ano, [0] * 12)
 
-        if ganho_anterior > 0:
-            ganho_percentual = round(abs((ganho_ano - ganho_anterior) / ganho_anterior * 100))
-        else:
-            ganho_percentual = 0
+            ganhos_ano_anterior = ganhos_por_ano.get(ano_anterior_selecionado, [0] * 12)
+            despesas_ano_anterior = despesas_por_ano.get(ano_anterior_selecionado, [0] * 12)
 
-        if despesas_anterior > 0:
-            despesas_percentual = round(abs((despesas_ano - despesas_anterior) / despesas_anterior * 100))
-        else:
-            despesas_percentual = 0
+            ganho_ano_selecionado = sum(ganhos_ano_selecionado)
+            despesas_ano_selecionado = sum(despesas_ano_selecionado)
 
-        if saldo_anterior != 0:
-            saldo_percentual = round(abs((saldo_atual - saldo_anterior) / saldo_anterior * 100))
-        else:
-            saldo_percentual = 0
+            ganho_ano_anterior = sum(ganhos_ano_anterior)
+            despesas_ano_anterior = sum(despesas_ano_anterior)
 
-        if dias_trabalhados_anterior > 0:
-            dias_percentual = round(abs((dias_trabalhados_ano - dias_trabalhados_anterior) / dias_trabalhados_anterior * 100))
-        else:
-            dias_percentual = 0
+            saldo_ano_selecionado = ganho_ano_selecionado - despesas_ano_selecionado
+            saldo_ano_anterior = ganho_ano_anterior - despesas_ano_anterior
 
-        if pacotes_anterior > 0:
-            pacotes_percentual = round(abs((pacotes_ano - pacotes_anterior) / pacotes_anterior * 100))
-        else:
-            pacotes_percentual = 0
+            dias_ano_selecionado = dias_por_ano.get(ano, 0)
+            dias_ano_anterior = dias_por_ano.get(ano_anterior_selecionado, 0)
 
-        if media_ganho_dia_anterior > 0:
-            media_percentual = round(abs((media_ganho_dia - media_ganho_dia_anterior) / media_ganho_dia_anterior * 100))
-        else:
-            media_percentual = 0
+            pacotes_ano_selecionado = pacotes_por_ano.get(ano, 0)
+            pacotes_ano_anterior = pacotes_por_ano.get(ano_anterior_selecionado, 0)
 
+            if dias_ano_selecionado > 0:
+                media_ano_selecionado = ganho_ano_selecionado / dias_ano_selecionado
+            else:
+                media_ano_selecionado = 0
 
-        ganho_subiu = ganho_ano > ganho_anterior
-        despesas_subiram = despesas_ano > despesas_anterior
-        saldo_subiu = saldo_atual > saldo_anterior
+            if dias_ano_anterior > 0:
+                media_ano_anterior = ganho_ano_anterior / dias_ano_anterior
+            else:
+                media_ano_anterior = 0
 
-        dias_subiram = dias_trabalhados_ano > dias_trabalhados_anterior
-        pacotes_subiram = pacotes_ano > pacotes_anterior
-        media_subiu = media_ganho_dia > media_ganho_dia_anterior
+            if ganho_ano_anterior > 0:
+                ganho_percentual_selecionado = round(abs((ganho_ano_selecionado - ganho_ano_anterior) / ganho_ano_anterior * 100))
+            else:
+                ganho_percentual_selecionado = 0
 
-        saldo_negativo = saldo_atual < 0
+            if despesas_ano_anterior > 0:
+                despesas_percentual_selecionado = round(abs((despesas_ano_selecionado - despesas_ano_anterior) / despesas_ano_anterior * 100))
+            else:
+                despesas_percentual_selecionado = 0
 
+            if saldo_ano_anterior != 0:
+                saldo_percentual_selecionado = round(abs((saldo_ano_selecionado - saldo_ano_anterior) / saldo_ano_anterior * 100))
+            else:
+                saldo_percentual_selecionado = 0
 
-        mes_atual = datetime.now().month
-        saldo_mes_atual = ganhos_mensais[mes_atual - 1] - despesas_mensais[mes_atual - 1]
+            if dias_ano_anterior > 0:
+                dias_percentual_selecionado = round(abs((dias_ano_selecionado - dias_ano_anterior) / dias_ano_anterior * 100))
+            else:
+                dias_percentual_selecionado = 0
 
-        if mes_atual > 1:
-            saldo_mes_anterior = ganhos_mensais[mes_atual - 2] - despesas_mensais[mes_atual - 2]
-        else:
-            saldo_mes_anterior = 0
+            if pacotes_ano_anterior > 0:
+                pacotes_percentual_selecionado = round(abs((pacotes_ano_selecionado - pacotes_ano_anterior) / pacotes_ano_anterior * 100))
+            else:
+                pacotes_percentual_selecionado = 0
 
-        if saldo_mes_anterior != 0:
-            projecao_percentual = round(abs((saldo_mes_atual - saldo_mes_anterior) / saldo_mes_anterior * 100))
-        else:
-            projecao_percentual = 0
+            if media_ano_anterior > 0:
+                media_percentual_selecionado = round(abs((media_ano_selecionado - media_ano_anterior) / media_ano_anterior * 100))
+            else:
+                media_percentual_selecionado = 0
 
-        projecao_subiu = saldo_mes_atual > saldo_mes_anterior
+            ganho_subiu_selecionado = ganho_ano_selecionado > ganho_ano_anterior
+            despesas_subiram_selecionado = despesas_ano_selecionado > despesas_ano_anterior
+            saldo_subiu_selecionado = saldo_ano_selecionado > saldo_ano_anterior
 
-        saldo_projetado_mensal = saldo_atual / mes_atual
-        saldo_projetado_anual = saldo_projetado_mensal * 12
+            dias_subiram_selecionado = dias_ano_selecionado > dias_ano_anterior
+            pacotes_subiram_selecionado = pacotes_ano_selecionado > pacotes_ano_anterior
+            media_subiu_selecionado = media_ano_selecionado > media_ano_anterior
 
+            saldo_negativo_selecionado = saldo_ano_selecionado < 0
+
+            if ano == ano_atual:
+                mes_referencia = datetime.now().month
+            else:
+                mes_referencia = 12
+
+            saldo_mes_atual_selecionado = ganhos_por_ano[ano][mes_referencia - 1] - despesas_por_ano[ano][mes_referencia - 1]
+
+            if mes_referencia > 1:
+                saldo_mes_anterior_selecionado = ganhos_por_ano[ano][mes_referencia - 2] - despesas_por_ano[ano][mes_referencia - 2]
+            else:
+                saldo_mes_anterior_selecionado = 0
+
+            if saldo_mes_anterior_selecionado != 0:
+                projecao_percentual_selecionado = round(abs((saldo_mes_atual_selecionado - saldo_mes_anterior_selecionado) / saldo_mes_anterior_selecionado * 100))
+            else:
+                projecao_percentual_selecionado = 0
+
+            projecao_subiu_selecionado = saldo_mes_atual_selecionado > saldo_mes_anterior_selecionado
+
+            if ano == ano_atual:
+                meses_projecao = datetime.now().month
+            else:
+                meses_projecao = 12
+
+            saldo_projetado_mensal_selecionado = saldo_ano_selecionado / meses_projecao
+            saldo_projetado_anual_selecionado = saldo_projetado_mensal_selecionado * 12
+
+            dados_por_ano[ano] = {
+                'ganho_ano': ganho_ano_selecionado,
+                'despesas_ano': despesas_ano_selecionado,
+                'saldo_atual': saldo_ano_selecionado,
+
+                'ganho_percentual': ganho_percentual_selecionado,
+                'despesas_percentual': despesas_percentual_selecionado,
+                'saldo_percentual': saldo_percentual_selecionado,
+
+                'ganho_subiu': ganho_subiu_selecionado,
+                'despesas_subiram': despesas_subiram_selecionado,
+                'saldo_subiu': saldo_subiu_selecionado,
+                'saldo_negativo': saldo_negativo_selecionado,
+
+                'dias_trabalhados_ano': dias_ano_selecionado,
+                'pacotes_ano': pacotes_ano_selecionado,
+                'media_ganho_dia': media_ano_selecionado,
+
+                'dias_percentual': dias_percentual_selecionado,
+                'pacotes_percentual': pacotes_percentual_selecionado,
+                'media_percentual': media_percentual_selecionado,
+
+                'dias_subiram': dias_subiram_selecionado,
+                'pacotes_subiram': pacotes_subiram_selecionado,
+                'media_subiu': media_subiu_selecionado,
+
+                'saldo_projetado_mensal': saldo_projetado_mensal_selecionado,
+                'saldo_projetado_anual': saldo_projetado_anual_selecionado,
+
+                'projecao_percentual': projecao_percentual_selecionado,
+                'projecao_subiu': projecao_subiu_selecionado
+            }
+
+        dados_atuais = dados_por_ano[ano_atual]
+
+        ganho_ano = dados_atuais['ganho_ano']
+        despesas_ano = dados_atuais['despesas_ano']
+        saldo_atual = dados_atuais['saldo_atual']
+
+        ganho_percentual = dados_atuais['ganho_percentual']
+        despesas_percentual = dados_atuais['despesas_percentual']
+        saldo_percentual = dados_atuais['saldo_percentual']
+
+        ganho_subiu = dados_atuais['ganho_subiu']
+        despesas_subiram = dados_atuais['despesas_subiram']
+        saldo_subiu = dados_atuais['saldo_subiu']
+        saldo_negativo = dados_atuais['saldo_negativo']
+
+        ganhos_mensais = ganhos_por_ano[ano_atual]
+
+        dias_trabalhados_ano = dados_atuais['dias_trabalhados_ano']
+        pacotes_ano = dados_atuais['pacotes_ano']
+        media_ganho_dia = dados_atuais['media_ganho_dia']
+
+        dias_percentual = dados_atuais['dias_percentual']
+        pacotes_percentual = dados_atuais['pacotes_percentual']
+        media_percentual = dados_atuais['media_percentual']
+
+        dias_subiram = dados_atuais['dias_subiram']
+        pacotes_subiram = dados_atuais['pacotes_subiram']
+        media_subiu = dados_atuais['media_subiu']
+
+        saldo_projetado_mensal = dados_atuais['saldo_projetado_mensal']
+        saldo_projetado_anual = dados_atuais['saldo_projetado_anual']
+
+        projecao_percentual = dados_atuais['projecao_percentual']
+        projecao_subiu = dados_atuais['projecao_subiu']
 
         return render_template(
             'dashboard.html',
 
             usuario=usuario,
             ano_atual=ano_atual,
+
+            anos_registrados=anos_registrados,
+            ganhos_por_ano=ganhos_por_ano,
+            dados_por_ano=dados_por_ano,
 
             ganho_ano=ganho_ano,
             despesas_ano=despesas_ano,
@@ -480,9 +611,6 @@ def dashboard():
     finally:
         cursor.close()
 
-@app.route('/relatorio')
-def relatorio():
-    return render_template('relatorios.html')
 
 @app.route('/perfil', methods=['GET'])
 def perfil():
@@ -748,7 +876,7 @@ def editar_categoria(id):
                 return redirect(url_for('editar_categoria', id=id))
 
             tipo = int(request.form['tipo'])
-            cor = request.form['cor']
+            cor = request.form['cor'].replace("#","")
             icone = request.form['icone']
 
             cursor.execute("""SELECT 1 FROM CATEGORIA WHERE upper(NOME_CATEGORIA) = ? AND ID_USUARIO = ? AND ID_CATEGORIA <> ?""", (nome_categoria.upper(), id_usuario, id))
@@ -832,8 +960,22 @@ def cadastrar_servico_extra():
     data = request.form['data']
     descricao = request.form['descricao'].strip()
 
+    if len(descricao) > 250:
+        flash('A descrição tem que ter no máximo 250 caracteres!', 'error')
+        return redirect(url_for('servico_extra'))
+
+    data_atual = datetime.now().date()
+
+    if data > data_atual.strftime('%Y-%m-%d'):
+        flash('Não é possível cadastrar um serviço extra com data futura!', 'error')
+        return redirect(url_for('servico_extra'))
+
     if not servico_realizado:
         flash('O campo "Serviço Realizado" não pode ser vazio!', 'error')
+        return redirect(url_for('servico_extra'))
+
+    if not descricao:
+        flash('O campo "Descrição do serviço" não pode ser vazio!', 'error')
         return redirect(url_for('servico_extra'))
 
     if valor <= 0:
@@ -850,7 +992,7 @@ def cadastrar_servico_extra():
         cursor.execute("""INSERT INTO SERVICO_EXTRA (SERVICO_REALIZADO, VALOR, DATA_SERVICO, DESCRICAO, ID_USUARIO, STATUS) VALUES (?, ?, ?, ?, ?, 1)""", (servico_realizado, valor, data, descricao, id_usuario))
         con.commit()
         flash('Serviço cadastrado com sucesso!', 'success')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('rendimentos'))
 
     except Exception as e:
         con.rollback()
@@ -859,7 +1001,6 @@ def cadastrar_servico_extra():
 
     finally:
         cursor.close()
-
 
 @app.route('/excluir_servico_extra/<int:id>', methods=['POST'])
 def excluir_servico_extra(id):
@@ -931,9 +1072,16 @@ def editar_servico_extra(id):
             data_servico = request.form['data_servico']
             descricao = request.form['descricao'].strip()
 
-            # transforma em AAAA-MM-DD para conferir se não ta sendo alterada para uma data passada
+            if len(descricao) > 250:
+                flash('A descrição tem que ter no máximo 250 caracteres!', 'error')
+                return redirect(url_for('editar_servico_extra'))
+
             if data_servico < data_atual.strftime('%Y-%m-%d'):
                 flash('Não é possível alterar para uma data retroativa!', 'error')
+                return redirect(url_for('editar_servico_extra', id=id))
+
+            if data_servico > data_atual.strftime('%Y-%m-%d'):
+                flash('Não é possível alterar para uma data futura!', 'error')
                 return redirect(url_for('editar_servico_extra', id=id))
 
             if not servico_realizado:
@@ -1035,8 +1183,8 @@ def cadastrar_dia_trabalhado():
 
     data_atual = datetime.now().date()
 
-    if data < data_atual.strftime('%Y-%m-%d'):
-        flash('Não é possível cadastrar um dia trabalhado com data retroativa!', 'error')
+    if data > data_atual.strftime('%Y-%m-%d'):
+        flash('Não é possível cadastrar um dia trabalhado com data futura!', 'error')
         return redirect(url_for('dia_trabalhado'))
 
     cursor = con.cursor()
@@ -1064,7 +1212,7 @@ def cadastrar_dia_trabalhado():
         cursor.execute("""INSERT INTO DIA_TRABALHADO (DATA_TRABALHO, PACOTES_COLETADOS, VALOR_TOTAL, ID_USUARIO, STATUS) VALUES (?, ?, ?, ?, 1)""", (data, pacotes_coletados, valor_total, id_usuario))
         con.commit()
         flash('Dia trabalhado registrado com sucesso!', 'success')
-        return redirect(url_for('dashboard'))
+        return redirect(url_for('rendimentos'))
 
     except Exception as e:
         con.rollback()
@@ -1148,12 +1296,32 @@ def editar_dia_trabalhado(id):
                 flash('O campo "Pacotes coletados" deve ser maior que zero!', 'error')
                 return redirect(url_for('editar_dia_trabalhado', id=id))
 
-            # transforma em AAAA-MM-DD para conferir se não ta sendo alterada para uma data passada
             if data < data_atual.strftime('%Y-%m-%d'):
                 flash('Não é possível alterar para uma data retroativa!', 'error')
                 return redirect(url_for('editar_dia_trabalhado', id=id))
 
-            cursor.execute("""UPDATE DIA_TRABALHADO SET DATA_TRABALHO = ?, PACOTES_COLETADOS = ? WHERE ID_USUARIO = ? AND ID_DIA_TRABALHADO = ?""", (data, pacotes_coletados, id_usuario, id))
+            if data > data_atual.strftime('%Y-%m-%d'):
+                flash('Não é possível alterar para uma data futura!', 'error')
+                return redirect(url_for('editar_dia_trabalhado', id=id))
+
+            cursor.execute("""SELECT VALOR_DIARIA, ADICIONAL, MIN_PACOTES FROM USUARIO WHERE ID_USUARIO = ?""", (id_usuario,))
+
+            dados_usuario = cursor.fetchone()
+
+            if not dados_usuario:
+                flash('Dados do usuário não encontrados!', 'error')
+                return redirect(url_for('rendimentos'))
+
+            valor_diaria, adicional, min_pacotes = dados_usuario
+
+            valor_total = calcular_valor_total(
+                pacotes_coletados,
+                valor_diaria,
+                adicional,
+                min_pacotes
+            )
+
+            cursor.execute("""UPDATE DIA_TRABALHADO SET DATA_TRABALHO = ?, PACOTES_COLETADOS = ?, VALOR_TOTAL = ? WHERE ID_USUARIO = ? AND ID_DIA_TRABALHADO = ?""", (data, pacotes_coletados, valor_total, id_usuario, id))
             con.commit()
             flash('Registro editado com sucesso!', 'success')
             return redirect(url_for('rendimentos'))
@@ -1205,7 +1373,6 @@ def excluir_dia_trabalhado(id):
 
 @app.route('/movimentacao')
 def movimentacao():
-
     if 'id_usuario' not in session:
         flash('É necessário realizar o login', 'error')
         return redirect(url_for('pagina_login'))
@@ -1216,7 +1383,7 @@ def movimentacao():
     try:
         usuario = buscar_dados(id_usuario)
 
-        cursor.execute("""SELECT ID_CATEGORIA, NOME_CATEGORIA, TIPO, COR, ICONE, STATUS FROM CATEGORIA WHERE STATUS = 1 AND (ID_CATEGORIA IN (1, 2) OR ID_USUARIO = ?) ORDER BY NOME_CATEGORIA""", (id_usuario,))
+        cursor.execute("""SELECT ID_CATEGORIA, NOME_CATEGORIA, TIPO, COR, ICONE, STATUS FROM CATEGORIA WHERE STATUS = 1 AND NOME_CATEGORIA <> 'Dia Trabalhado' AND (ID_CATEGORIA IN (1, 2) OR ID_USUARIO = ?) ORDER BY NOME_CATEGORIA""", (id_usuario,))
         categorias = cursor.fetchall()
 
         return render_template("movimentacao.html", usuario=usuario, categorias=categorias)
@@ -1230,7 +1397,6 @@ def movimentacao():
 
 @app.route('/cadastrar_movimentacao', methods=['POST'])
 def cadastrar_movimentacao():
-
     if 'id_usuario' not in session:
         flash('É necessário realizar o login', 'error')
         return redirect(url_for('pagina_login'))
@@ -1242,6 +1408,10 @@ def cadastrar_movimentacao():
     data = request.form['data']
     categoria = int(request.form['categoria'])
     descricao = request.form['descricao'].strip()
+
+    if len(descricao) > 250:
+        flash('A descrição tem que ter no máximo 250 caracteres!', 'error')
+        return redirect(url_for('movimentacao'))
 
     if valor <= 0:
         flash('O valor deve ser maior que zero!', 'error')
@@ -1263,12 +1433,18 @@ def cadastrar_movimentacao():
         flash('Tipo de movimentação inválido!', 'error')
         return redirect(url_for('movimentacao'))
 
+    data_atual = datetime.now().date()
+
+    if data > data_atual.strftime('%Y-%m-%d'):
+        flash('Não é possível cadastrar uma movimentação com data futura!', 'error')
+        return redirect(url_for('movimentacao'))
+
     cursor = con.cursor()
 
     try:
-        cursor.execute("""SELECT ID_CATEGORIA FROM CATEGORIA WHERE ID_CATEGORIA = ? AND STATUS = 1 AND ID_CATEGORIA IN(1, 2)
+        cursor.execute("""SELECT ID_CATEGORIA FROM CATEGORIA WHERE ID_CATEGORIA = ? AND STATUS = 1 AND NOME_CATEGORIA <> 'Dia Trabalhado' AND ID_CATEGORIA IN(1, 2)
                     UNION
-                    SELECT ID_CATEGORIA FROM CATEGORIA WHERE ID_CATEGORIA = ? AND ID_USUARIO = ? AND STATUS = 1""",
+                    SELECT ID_CATEGORIA FROM CATEGORIA WHERE ID_CATEGORIA = ? AND ID_USUARIO = ? AND STATUS = 1 AND NOME_CATEGORIA <> 'Dia Trabalhado'""",
                     (categoria, categoria, id_usuario))
 
         if not cursor.fetchone():
@@ -1278,7 +1454,11 @@ def cadastrar_movimentacao():
         cursor.execute("""INSERT INTO MOVIMENTACAO (VALOR, TIPO, DATA_MOVIMENTACAO, DESCRICAO, ID_CATEGORIA, ID_USUARIO, STATUS) VALUES (?, ?, ?, ?, ?, ?, 1)""", (valor, tipo, data, descricao, categoria, id_usuario))
         con.commit()
         flash('Movimentação cadastrada com sucesso!', 'success')
-        return redirect(url_for('dashboard'))
+
+        if tipo == 1:
+            return redirect(url_for('despesas'))
+        else:
+            return redirect(url_for('rendimentos'))
 
     except Exception as e:
         con.rollback()
@@ -1297,10 +1477,18 @@ def inativar_movimentacao(id):
         return redirect(url_for('pagina_login'))
 
     id_usuario = session['id_usuario']
+
+    ativar = int(request.form['ativar'])
+
+    if ativar == 1:
+        mensagem = 'ativada'
+    else:
+        mensagem = 'inativada'
+
     cursor = con.cursor()
 
     try:
-        cursor.execute("""SELECT TIPO, DATA_MOVIMENTACAO FROM MOVIMENTACAO WHERE ID_USUARIO = ? AND ID_MOVIMENTACAO = ? AND STATUS = 1""", (id_usuario, id))
+        cursor.execute("""SELECT TIPO, DATA_MOVIMENTACAO FROM MOVIMENTACAO WHERE ID_USUARIO = ? AND ID_MOVIMENTACAO = ?""", (id_usuario, id))
 
         movimentacao = cursor.fetchone()
 
@@ -1309,19 +1497,10 @@ def inativar_movimentacao(id):
             return redirect(url_for('dashboard'))
 
         tipo = movimentacao[0]
-        data_atual = datetime.now().date()
 
-        if movimentacao[1] >= data_atual:
-            flash('Só é possível inativar movimentações de datas passadas!', 'error')
-
-            if tipo == 1:
-                return redirect(url_for('despesas'))
-            else:
-                return redirect(url_for('rendimentos'))
-
-        cursor.execute("""UPDATE MOVIMENTACAO SET STATUS = 0 WHERE ID_USUARIO = ? AND ID_MOVIMENTACAO = ?""", (id_usuario, id))
+        cursor.execute("""UPDATE MOVIMENTACAO SET STATUS = ? WHERE ID_USUARIO = ? AND ID_MOVIMENTACAO = ?""", (ativar, id_usuario, id))
         con.commit()
-        flash('Movimentação inativada com sucesso!', 'success')
+        flash(f'Movimentação {mensagem} com sucesso!', 'success')
 
         if tipo == 1:
             return redirect(url_for('despesas'))
@@ -1358,8 +1537,7 @@ def excluir_movimentacao(id):
         data_atual = datetime.now().date()
 
         if movimentacao[1] < data_atual:
-            flash(
-                'Não é possível excluir movimentações de datas passadas!','error')
+            flash('Não é possível excluir movimentações de datas passadas!','error')
             if tipo == 2:
                 return redirect(url_for('rendimentos'))
             else:
@@ -1404,23 +1582,44 @@ def editar_movimentacao(id):
 
         if movimentacao[5] == 0:
             flash('Uma movimentação inativada não pode ser editada.', 'error')
-            return redirect(url_for('dashboard'))
+            if movimentacao[1] == 2:
+                return redirect(url_for('rendimentos'))
+            else:
+                return redirect(url_for('despesas'))
 
-        data_atual = str(datetime.now().date())
+        data_atual = datetime.now().date()
 
-        if str(movimentacao[2]) < data_atual:
+        if movimentacao[2] < data_atual:
             flash('Não é possível editar movimentações de datas passadas!', 'error')
-            return redirect(url_for('dashboard'))
+            if movimentacao[1] == 2:
+                return redirect(url_for('rendimentos'))
+            else:
+                return redirect(url_for('despesas'))
 
-        cursor.execute("""SELECT ID_CATEGORIA, NOME_CATEGORIA, TIPO, COR, ICONE, STATUS FROM CATEGORIA WHERE ID_CATEGORIA IN (1, 2) AND STATUS = 1 UNION SELECT ID_CATEGORIA, NOME_CATEGORIA, TIPO, COR, ICONE, STATUS FROM CATEGORIA WHERE ID_USUARIO = ? AND STATUS = 1 ORDER BY NOME_CATEGORIA""", (id_usuario,))
+        cursor.execute("""SELECT ID_CATEGORIA, NOME_CATEGORIA, TIPO, COR, ICONE, STATUS FROM CATEGORIA WHERE ID_CATEGORIA IN (1, 2) AND STATUS = 1 AND NOME_CATEGORIA <> 'Dia Trabalhado' UNION SELECT ID_CATEGORIA, NOME_CATEGORIA, TIPO, COR, ICONE, STATUS FROM CATEGORIA WHERE ID_USUARIO = ? AND STATUS = 1 AND NOME_CATEGORIA <> 'Dia Trabalhado' ORDER BY 2""", (id_usuario,))
         categorias = cursor.fetchall()
 
         if request.method == 'POST':
             valor = float(request.form['valor'])
             tipo = int(request.form['tipo'])
             data = request.form['data']
-            categoria = int(request.form['categoria'])
+
+            categoria_form = request.form['categoria']
+
+            if categoria_form == 'nova':
+                return redirect(url_for('nova_categoria'))
+
+            if not categoria_form.isdigit():
+                flash('Selecione uma categoria válida!', 'error')
+                return redirect(url_for('editar_movimentacao', id=id))
+
+            categoria = int(categoria_form)
+
             descricao = request.form['descricao'].strip()
+
+            if len(descricao) > 250:
+                flash('A descrição tem que ter no máximo 250 caracteres!', 'error')
+                return redirect(url_for('editar_movimentacao'))
 
             if valor <= 0:
                 flash('O valor deve ser maior que zero!', 'error')
@@ -1438,11 +1637,15 @@ def editar_movimentacao(id):
                 flash('Tipo de movimentação inválido!', 'error')
                 return redirect(url_for('editar_movimentacao', id=id))
 
-            if data < data_atual:
+            if data < data_atual.strftime('%Y-%m-%d'):
                 flash('Não é possível alterar para uma data passada!', 'error')
                 return redirect(url_for('editar_movimentacao', id=id))
 
-            cursor.execute("""SELECT ID_CATEGORIA FROM CATEGORIA WHERE ID_CATEGORIA = ? AND TIPO = ? AND STATUS = 1 AND ID_CATEGORIA IN (1, 2) UNION SELECT ID_CATEGORIA FROM CATEGORIA WHERE ID_CATEGORIA = ? AND ID_USUARIO = ? AND TIPO = ? AND STATUS = 1""", (categoria, tipo, categoria, id_usuario, tipo))
+            if data > data_atual.strftime('%Y-%m-%d'):
+                flash('Não é possível alterar para uma data futura!', 'error')
+                return redirect(url_for('editar_movimentacao', id=id))
+
+            cursor.execute("""SELECT ID_CATEGORIA FROM CATEGORIA WHERE ID_CATEGORIA = ? AND TIPO = ? AND STATUS = 1 AND NOME_CATEGORIA <> 'Dia Trabalhado' AND ID_CATEGORIA IN (1, 2) UNION SELECT ID_CATEGORIA FROM CATEGORIA WHERE ID_CATEGORIA = ? AND ID_USUARIO = ? AND TIPO = ? AND STATUS = 1 AND NOME_CATEGORIA <> 'Dia Trabalhado'""", (categoria, tipo, categoria, id_usuario, tipo))
 
             if not cursor.fetchone():
                 flash('Categoria inválida para esse tipo de movimentação!', 'error')
@@ -1452,7 +1655,10 @@ def editar_movimentacao(id):
 
             con.commit()
             flash('Movimentação editada com sucesso!', 'success')
-            return redirect(url_for('dashboard'))
+            if tipo == 2:
+                return redirect(url_for('rendimentos'))
+            else:
+                return redirect(url_for('despesas'))
 
         else:
             return render_template('editar_movimentacao.html', movimentacao=movimentacao, categorias=categorias, usuario=usuario, id=id)
@@ -1480,18 +1686,18 @@ def despesas():
     try:
         usuario = buscar_dados(id_usuario)
 
-        cursor.execute("""SELECT M.ID_MOVIMENTACAO, M.DATA_MOVIMENTACAO, C.NOME_CATEGORIA, M.DESCRICAO, M.VALOR, M.STATUS
+        cursor.execute("""SELECT M.ID_MOVIMENTACAO, M.DATA_MOVIMENTACAO, C.NOME_CATEGORIA, M.DESCRICAO, M.VALOR, M.STATUS, C.COR, C.ICONE
             FROM MOVIMENTACAO M
             LEFT JOIN CATEGORIA C ON C.ID_CATEGORIA = M.ID_CATEGORIA
-            WHERE M.ID_USUARIO = ? AND M.TIPO = 1 AND M.STATUS = 1
+            WHERE M.ID_USUARIO = ? AND M.TIPO = 1
             ORDER BY M.DATA_MOVIMENTACAO DESC""", (id_usuario,))
         despesas = cursor.fetchall()
 
         cursor.execute("""SELECT cast(COALESCE(SUM(VALOR), 0) as double precision) FROM MOVIMENTACAO WHERE ID_USUARIO = ? AND TIPO = 1 AND STATUS = 1""", (id_usuario,))
         total_despesas = cursor.fetchone()[0]
 
-        cursor.execute("""SELECT cast(COALESCE(SUM(VALOR), 0) as double precision) FROM MOVIMENTACAO 
-            WHERE ID_USUARIO = ? AND TIPO = 1 AND STATUS = 1 
+        cursor.execute("""SELECT cast(COALESCE(SUM(VALOR), 0) as double precision) FROM MOVIMENTACAO
+            WHERE ID_USUARIO = ? AND TIPO = 1 AND STATUS = 1
             AND EXTRACT(MONTH FROM DATA_MOVIMENTACAO) = ? AND EXTRACT(YEAR FROM DATA_MOVIMENTACAO) = ?""", (id_usuario, datetime.now().month, datetime.now().year))
         despesas_mes = cursor.fetchone()[0]
 
@@ -1518,7 +1724,6 @@ def despesas():
 
 @app.route('/rendimentos')
 def rendimentos():
-
     if 'id_usuario' not in session:
         flash('É necessário realizar o login', 'error')
         return redirect(url_for('pagina_login'))
@@ -1531,12 +1736,17 @@ def rendimentos():
         rendimentos = []
 
         # Receitas
-        cursor.execute("""SELECT M.ID_MOVIMENTACAO, M.DATA_MOVIMENTACAO,
-            COALESCE(C.NOME_CATEGORIA, 'Receita'), M.DESCRICAO, M.VALOR
-            FROM MOVIMENTACAO M
-            LEFT JOIN CATEGORIA C ON C.ID_CATEGORIA = M.ID_CATEGORIA
-            WHERE M.ID_USUARIO = ? AND M.TIPO = 2 AND M.STATUS = 1 AND (C.NOME_CATEGORIA IS NULL OR C.NOME_CATEGORIA <> 'Dia Trabalhado')""",
-            (id_usuario,))
+        cursor.execute("""
+                       SELECT M.ID_MOVIMENTACAO, M.DATA_MOVIMENTACAO,
+                              COALESCE(C.NOME_CATEGORIA, 'Receita'),
+                              M.DESCRICAO, M.VALOR, M.STATUS,
+                              C.COR, C.ICONE
+                       FROM MOVIMENTACAO M
+                                LEFT JOIN CATEGORIA C ON C.ID_CATEGORIA = M.ID_CATEGORIA
+                       WHERE M.ID_USUARIO = ?
+                         AND M.TIPO = 2
+                         AND (C.NOME_CATEGORIA IS NULL OR C.NOME_CATEGORIA <> 'Dia Trabalhado')
+                       """, (id_usuario,))
 
         for r in cursor.fetchall():
             rendimentos.append({
@@ -1545,15 +1755,19 @@ def rendimentos():
                 'categoria': r[2],
                 'descricao': r[3],
                 'valor': r[4],
-                'tipo': 'movimentacao'
+                'status': r[5],
+                'tipo': 'movimentacao',
+                'cor': r[6],
+                'icone': r[7]
             })
 
         # Dias trabalhados
-        cursor.execute("""SELECT ID_DIA_TRABALHADO, DATA_TRABALHO,
-            VALOR_TOTAL
+        cursor.execute("""
+            SELECT ID_DIA_TRABALHADO, DATA_TRABALHO,
+                VALOR_TOTAL, STATUS
             FROM DIA_TRABALHADO
-            WHERE ID_USUARIO = ? AND STATUS = 1""",
-            (id_usuario,))
+            WHERE ID_USUARIO = ?
+        """, (id_usuario,))
 
         for d in cursor.fetchall():
             rendimentos.append({
@@ -1562,15 +1776,17 @@ def rendimentos():
                 'categoria': 'Dia Trabalhado',
                 'descricao': 'Receita cadastrada pelo Dia Trabalhado',
                 'valor': d[2],
+                'status': d[3],
                 'tipo': 'dia_trabalhado'
             })
 
         # Serviços extras
-        cursor.execute("""SELECT ID_SERVICO_EXTRA, DATA_SERVICO,
-            DESCRICAO, VALOR
+        cursor.execute("""
+            SELECT ID_SERVICO_EXTRA, DATA_SERVICO,
+                DESCRICAO, VALOR, STATUS
             FROM SERVICO_EXTRA
-            WHERE ID_USUARIO = ? AND STATUS = 1""",
-            (id_usuario,))
+            WHERE ID_USUARIO = ?
+        """, (id_usuario,))
 
         for s in cursor.fetchall():
             rendimentos.append({
@@ -1579,12 +1795,22 @@ def rendimentos():
                 'categoria': 'Serviço Extra',
                 'descricao': s[2],
                 'valor': s[3],
+                'status': s[4],
                 'tipo': 'servico_extra'
             })
 
+        def pegar_data(rendimento):
+            return rendimento['data']
+
+        # a sort organiza todos os elementos em uma lista em ordem crescente (numérica ou alfabética)
         rendimentos.sort(
-            key=lambda r: r['data'],
-            reverse=True
+            # como queremos ordenar por data, utilizamos a key
+            # key define qual critério será utilizado pra organizar a lista, no caso a data
+            key= pegar_data,
+
+            # reverse para determinar o sentido da ordenação
+            # ordenação decrescente: da maior data para a menor data, ou seja, do mais recente para o mais antigo
+            reverse= True
         )
 
         return render_template(
@@ -1601,6 +1827,49 @@ def rendimentos():
     finally:
         cursor.close()
 
+
+@app.route('/excluir_usuario', methods=['POST'])
+def excluir_usuario():
+    if 'id_usuario' not in session:
+        flash('É necessário realizar o login', 'error')
+        return redirect(url_for('pagina_login'))
+
+    id_usuario = session['id_usuario']
+
+    cursor = con.cursor()
+
+    try:
+        cursor.execute("""SELECT 1 FROM USUARIO WHERE ID_USUARIO = ?""", (id_usuario,))
+
+        if not cursor.fetchone():
+            session.clear()
+            flash('Usuário não encontrado!', 'error')
+            return redirect(url_for('pagina_login'))
+
+        cursor.execute("""DELETE FROM HISTORICO_SENHA WHERE ID_USUARIO = ?""", (id_usuario,))
+
+        cursor.execute("""DELETE FROM MOVIMENTACAO WHERE ID_USUARIO = ?""", (id_usuario,))
+
+        cursor.execute("""DELETE FROM DIA_TRABALHADO WHERE ID_USUARIO = ?""", (id_usuario,))
+
+        cursor.execute("""DELETE FROM SERVICO_EXTRA WHERE ID_USUARIO = ?""", (id_usuario,))
+
+        cursor.execute("""DELETE FROM CATEGORIA WHERE ID_USUARIO = ?""", (id_usuario,))
+
+        cursor.execute("""DELETE FROM USUARIO WHERE ID_USUARIO = ?""", (id_usuario,))
+
+        con.commit()
+        session.clear()
+        flash('Perfil excluído com sucesso!', 'success')
+        return redirect(url_for('pagina_login'))
+
+    except Exception as e:
+        con.rollback()
+        flash(f'Ocorreu um erro: {e}', 'error')
+        return redirect(url_for('perfil'))
+
+    finally:
+        cursor.close()
 
 
 if __name__ == "__main__":

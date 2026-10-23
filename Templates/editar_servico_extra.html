@@ -1,65 +1,51 @@
-
 <!DOCTYPE html>
 <html lang="pt-br" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Serviço Extra - Bolso em Dia</title>
-
     <link rel="icon" href="{{ url_for('static', filename='uploads/logo-escuro.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro_servico_extra.css') }}">
 </head>
-
-<body class="pagina-sistema">
-
+<body class="pagina-sistema pagina-editar-servico">
     <aside class="menu-lateral">
         <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
-
         <img class="logo-perfil" src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}" alt="Bolso em Dia">
-
         <nav class="navegacao-perfil">
             <a href="{{ url_for('dashboard') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
                 <span>Dashboard</span>
             </a>
-
             <a href="{{ url_for('rendimentos') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
                 <span>Rendimentos</span>
             </a>
-
             <a href="{{ url_for('despesas') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
                 <span>Despesas</span>
             </a>
-
             <a href="{{ url_for('dia_trabalhado') }}">
                 <img src="{{ url_for('static', filename='uploads/perfil-dia-trabalhado.png') }}" alt="">
                 <span>Dia Trabalhado</span>
             </a>
-
             <a href="{{ url_for('servico_extra') }}" class="pagina-ativa">
                 <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
                 <span>Serviço Extra</span>
             </a>
-
             <a href="{{ url_for('todas_categorias') }}">
                 <img src="{{ url_for('static', filename='uploads/tag-azul.png') }}" alt="">
                 <span>Categorias</span>
             </a>
-
             <a href="#">
                 <img src="{{ url_for('static', filename='uploads/perfil-relatorios.png') }}" alt="">
                 <span>Relatórios</span>
             </a>
-
             <a href="#">
                 <img src="{{ url_for('static', filename='uploads/perfil-historico.png') }}" alt="">
                 <span>Histórico Semanal</span>
             </a>
         </nav>
-
         <a class="sair-perfil" href="{{ url_for('logout') }}">
             <div class="sair-conteudo">
                 <img src="{{ url_for('static', filename='uploads/perfil-sair.png') }}" alt="">
@@ -67,149 +53,86 @@
             </div>
         </a>
     </aside>
-
     <main class="conteudo-sistema">
-
         <header class="topo-perfil">
             <div></div>
-
             <a href="{{ url_for('perfil') }}" class="usuario-logado">
                 {% if usuario[9] %}
                     <img src="{{ url_for('static', filename='Uploads/' + usuario[9]) }}" alt="Foto do usuário">
                 {% else %}
                     <img src="{{ url_for('static', filename='Uploads/perfil-usuario-topo.png') }}" alt="Foto padrão">
                 {% endif %}
-
                 <div>
                     <strong>{{ usuario[0].split()[:2] | join(' ') }}</strong>
                     <span>{{ usuario[1] }}</span>
                 </div>
             </a>
         </header>
-
         <div class="linha-topo"></div>
-
         <section class="titulo-servico">
             <p>Olá, {{ usuario[0].split()[:2] | join(' ') }}!</p>
             <h1>Editar Serviço Extra</h1>
             <p>Altere as informações do serviço extra realizado.</p>
         </section>
-
         {% with mensagens = get_flashed_messages(with_categories=true) %}
             {% for categoria, mensagem in mensagens %}
                 <p class="mensagem {{ categoria }}">{{ mensagem }}</p>
             {% endfor %}
         {% endwith %}
-
         <section class="card-servico">
-
             <div class="cabecalho-servico">
                 <div class="icone-servico">
-                    <img src="{{ url_for('static', filename='uploads/calendar-verde.png') }}" alt="">
+                    <img src="{{ url_for('static', filename='uploads/perfil-servico-extra.png') }}" alt="">
                 </div>
-
                 <div>
                     <h2>Editar Serviço Extra</h2>
                     <p>Altere as informações abaixo para atualizar o registro.</p>
                 </div>
             </div>
-
             <form action="{{ url_for('editar_servico_extra', id=request.view_args['id']) }}" method="POST">
-
                 <div class="grupo-servico">
                     <label>Serviço realizado <span>*</span></label>
-
-                    <input
-                        type="text"
-                        name="servico_realizado"
-                        placeholder="Ex: Manutenção, Pintura, Instalação, Consultoria, etc"
-                        value="{{ servico[0] }}"
-                        required
-                    >
+                    <input type="text" name="servico_realizado" placeholder="Ex: Manutenção, Pintura, Instalação, Consultoria, etc" value="{{ servico[0] }}" required>
                 </div>
-
                 <div class="linha-servico">
-
                     <div class="grupo-servico">
                         <label>Valor recebido <span>*</span></label>
-
                         <div class="campo-valor">
                             <strong>R$</strong>
-
-                            <input
-                                type="number"
-                                name="valor"
-                                min="0.01"
-                                step="0.01"
-                                placeholder="0,00"
-                                value="{{ servico[1] }}"
-                                required
-                            >
+                            <input type="number" name="valor" min="0.01" step="0.01" placeholder="0,00" value="{{ servico[1] }}" required>
                         </div>
                     </div>
-
                     <div class="grupo-servico">
                         <label>Data <span>*</span></label>
-
                         <div class="campo-data">
-                            <div class="icone-campo">
-                                <img src="{{ url_for('static', filename='uploads/calendar-cinza.png') }}" alt="">
-                            </div>
-
-                            <input
-                                type="date"
-                                name="data_servico"
-                                value="{{ servico[2].strftime('%Y-%m-%d') }}"
-                                required
-                            >
+                            <input type="date" name="data_servico" value="{{ servico[2].strftime('%Y-%m-%d') }}" required>
+                            <img class="calendario-servico" src="{{ url_for('static', filename='uploads/calendario-azul-escuro.png') }}" alt="">
                         </div>
                     </div>
-
                 </div>
-
                 <div class="grupo-descricao">
-                    <label>Descrição do serviço</label>
-
+                    <label>Descrição da receita</label>
                     <div class="campo-descricao">
                         <img class="icone-descricao" src="{{ url_for('static', filename='uploads/document-cinza.png') }}" alt="">
-
-                        <textarea
-                            name="descricao"
-                            maxlength="500"
-                            placeholder="Descreva os detalhes do serviço extra..."
-                        >{{ servico[3] or '' }}</textarea>
-
-                        <span class="contador-descricao">{{ (servico[3] or '') | length }}/500</span>
+                        <textarea name="descricao" maxlength="500" placeholder="Descreva os detalhes do serviço extra...">{{ servico[3] or '' }}</textarea>
+                        <span class="contador-descricao">{{ (servico[3] or '') | length }}/250</span>
                     </div>
                 </div>
-
                 <div class="botoes-servico">
-                    <a href="{{ url_for('rendimentos') }}" class="cancelar-servico">
-                        Cancelar
-                    </a>
-
-                    <button type="submit" class="registrar-servico">
-                        Salvar Alterações
-                    </button>
+                    <a href="{{ url_for('rendimentos') }}" class="cancelar-servico">Cancelar</a>
+                    <button type="submit" class="registrar-servico">Salvar Alterações</button>
                 </div>
-
             </form>
         </section>
-
     </main>
-
     <script>
-        // pega o campo de descrição
-        const descricao = document.querySelector('textarea');
+        const descricao = document.querySelector('textarea')
+        const contador = document.querySelector('.contador-descricao')
 
-        // pega o contador de caracteres
-        const contador = document.querySelector('.contador-descricao');
-
-        // atualiza o contador enquanto o usuário digita
+        // Atualiza o contador conforme o usuário digita na descrição
         descricao.addEventListener('input', function() {
-            contador.textContent = descricao.value.length + '/500';
-        });
+            contador.textContent = descricao.value.length + '/250'
+        })
     </script>
-
 </body>
 </html>

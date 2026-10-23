@@ -173,10 +173,12 @@
                             <input type="email" name="email" value="{{ usuario[1] }}">
                         </div>
 
+
                         <div class="campo-perfil">
-                            <img src="static/uploads/perfil-calendario-campo.png" alt="">
-                            <input type="data" name="data_nasc" value="{{ usuario[2] }}">
+                            <img src="static/uploads/perfil-calendario-campo.png" alt="" onclick="document.getElementById('data-nasc').showPicker()" style="cursor: pointer;">
+                            <input type="date" id="data-nasc" name="data_nasc" value="{{ usuario[2] }}">
                         </div>
+
 
                         <div class="campo-perfil">
                             <img src="static/uploads/perfil-telefone-campo.png" alt="">

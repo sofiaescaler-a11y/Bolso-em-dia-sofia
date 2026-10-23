@@ -7,6 +7,13 @@
     <link rel="icon" href="{{ url_for('static', filename='uploads/logo-escuro.png') }}" type="image/png">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/perfil.css') }}">
+
+    <!-- Importa o jQuery e o plugin de máscaras, que permite formatar
+     automaticamente os dados digitados nos campos, como datas,
+     telefones e CPF. O defer faz o segundo script esperar
+     o HTML ser carregado antes de ser executado. -->
+    <script src="https://code.jquery.com/jquery-4.0.0.min.js" integrity="sha256-OaVG6prZf4v69dPg6PhVattBXkcOWQB62pdZ3ORyrao=" crossorigin="anonymous"></script>
+    <script src="{{ url_for('static', filename='js/jquery.mask.min.js') }}" defer></script>
 </head>
 <body>
     <div class="pagina-perfil">
@@ -154,26 +161,43 @@
 
                     <div class="campo-perfil somente-leitura">
                         <img src="static/uploads/perfil-calendario-campo.png" alt="">
-                        <p>{{ usuario[2] }}</p>
+                        <p>{{ usuario[2].strftime('%d/%m/%Y') }}</p>
                     </div>
 
                     <div class="campo-perfil somente-leitura">
                         <img src="static/uploads/perfil-telefone-campo.png" alt="">
-                        <p>{{ usuario[3] }}</p>
+                        <p data-mask="(00)00000-0000">{{ usuario[3] }}</p>
                     </div>
 
                     <div class="campo-perfil somente-leitura">
                         <img src="static/uploads/perfil-cpf-campo.png" alt="">
-                        <p>{{ usuario[4] }}</p>
+                        <p data-mask="000.000.000-00" >{{ usuario[4] }}</p>
                     </div>
 
                     <div class="botoes-perfil">
-                        <button type="button" class="botao-excluir">Excluir Perfil</button>
+                        <button type="button" class="abrir-modal-exclusao botao-excluir" data-url="{{ url_for('excluir_usuario') }}" >Excluir Perfil</button>
                         <a class="botao-editar" href="{{ url_for('editar_usuario') }}">Editar Perfil</a>
                     </div>
                 </div>
             </section>
         </main>
     </div>
+
+    <div class="fundo-modal-exclusao" id="modal-exclusao">
+        <div class="modal-exclusao">
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir perfil?</p>
+
+            <div class="botoes-modal-exclusao">
+                <form id="form-exclusao" method="POST">
+                    <button type="submit" class="confirmar-exclusao">Confirmar</button>
+                </form>
+
+                <button type="button" class="cancelar-exclusao" id="cancelar-exclusao">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/modal_exclusao.js') }}"></script>
 </body>
 </html>

@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br" dir="ltr">
 <head>
@@ -8,7 +9,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/global.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/despesas.css') }}">
 </head>
-
 <body class="pagina-sistema">
     <aside class="menu-lateral">
         <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
@@ -74,6 +74,7 @@
                 {% else %}
                     <img src="{{ url_for('static', filename='Uploads/perfil-usuario-topo.png') }}" alt="Foto padrão">
                 {% endif %}
+
                 <div>
                     <strong>{{ usuario[0].split()[:2] | join(' ') }}</strong>
                     <span>{{ usuario[1] }}</span>
@@ -90,78 +91,109 @@
         {% endwith %}
 
         <div class="cabecalho-despesa">
-            <section class="titulo-perfil">
-                <p>Olá, {{ usuario[0].split()[:2] | join(' ') }}!</p>
+            <section class="titulo-despesa">
+                <p class="saudacao-despesa">Olá, {{ usuario[0].split()[:2] | join(' ') }}!</p>
                 <h1>Despesas</h1>
                 <p>Gerencie e acompanhe todas as suas despesas.</p>
             </section>
 
             <form action="{{ url_for('movimentacao') }}" method="GET">
                 <button class="btn-adicionar-despesa" type="submit">
-                    <img src="{{ url_for('static', filename='uploads/icone-mais.png') }}" alt="">
+                    <img src="{{ url_for('static', filename='uploads/mais-branco.png') }}" alt="">
                     <span>Adicionar despesa</span>
                 </button>
             </form>
         </div>
 
-        <section class="cards">
-            <div class="card">
-                <img class="card-img" src="{{ url_for('static', filename='uploads/perfil-despesa-vermelho.png') }}" alt="">
-                <div class="card-info">
-                    <p class="texto">Total de despesas</p>
-                    <p class="preco">{{ "R$ %.2f"|format(total_despesas|default(0)) }}</p>
+        <section class="cards-despesas">
+            <div class="card-despesa">
+                <div class="icone-card-despesa vermelho">
+                    <img src="{{ url_for('static', filename='uploads/cartao-vermelho.png') }}" alt="">
+                </div>
+
+                <div>
+                    <p>Total de despesas</p>
+                    <h2 class="valor-despesa">{{ "R$ %.2f"|format(total_despesas) }}</h2>
                 </div>
             </div>
 
-            <div class="card">
-                <img class="card-img" src="{{ url_for('static', filename='uploads/perfil-despesa-vermelho.png') }}" alt="">
-                <div class="card-info">
-                    <p class="texto">Despesas este mês</p>
-                    <p class="preco">{{ "R$ %.2f"|format(despesas_mes|default(0)) }}</p>
+            <div class="card-despesa">
+                <div class="icone-card-despesa vermelho">
+                    <img src="{{ url_for('static', filename='uploads/cartao-vermelho.png') }}" alt="">
+                </div>
+
+                <div>
+                    <p>Despesas este mês</p>
+                    <h2 class="valor-despesa">{{ "R$ %.2f"|format(despesas_mes) }}</h2>
                 </div>
             </div>
 
-            <div class="card">
-                <img class="card-img2" src="{{ url_for('static', filename='uploads/menu-verde.png') }}" alt="">
-                <div class="card-info">
-                    <p class="texto">Quantidade de despesas</p>
-                    <p class="preco2">{{ quantidade_despesas|default(0) }}</p>
+            <div class="card-despesa">
+                <div class="icone-card-despesa verde">
+                    <img src="{{ url_for('static', filename='uploads/list-verde.png') }}" alt="">
+                </div>
+
+                <div>
+                    <p>Quantidade de despesas</p>
+                    <h2 class="quantidade-despesa">{{ quantidade_despesas }}</h2>
                 </div>
             </div>
         </section>
 
-        <div class="filtros-despesa">
-            <button class="filtro ativo" type="button">Todas</button>
-            <button class="filtro" type="button">Este mês</button>
-            <button class="filtro" type="button">Últimos 3 meses</button>
+        <div class="filtros-periodo">
+            <button class="filtro-periodo ativo" id="periodo-todas" type="button">Todas</button>
+            <button class="filtro-periodo" id="periodo-mes" type="button">Este mês</button>
+            <button class="filtro-periodo" id="periodo-tres-meses" type="button">Últimos 3 meses</button>
         </div>
 
         <section class="minhas-despesas">
-            <h2>Minhas despesas</h2>
+            <div class="topo-minhas-despesas">
+                <div class="titulo-minhas-despesas">
+                    <div class="icone-minhas-despesas">
+                        <img src="{{ url_for('static', filename='uploads/calendar-verde.png') }}" alt="">
+                    </div>
+
+                    <h2>Minhas despesas <span>({{ quantidade_despesas }})</span></h2>
+                </div>
+
+                <button type="button" class="pesquisa-mobile-despesas" id="botao-pesquisa-despesa">
+                    <img src="{{ url_for('static', filename='uploads/pesquisa-azul.png') }}" alt="Pesquisar">
+                </button>
+            </div>
 
             <div class="filtros-tabela">
                 <div class="campo-busca">
-                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/lupa-azul-escuro.png') }}" alt="">
-                    <input type="text" placeholder="Buscar despesas por descrição...">
+                    <img src="{{ url_for('static', filename='uploads/pesquisa-azul.png') }}" alt="">
+                    <input type="text" id="buscar-despesa" placeholder="Buscar despesas por descrição...">
                 </div>
 
-                <button class="filtro-tabela" type="button">
-                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/calendario-preto.png') }}" alt="">
-                    <span>Todos os meses</span>
-                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
-                </button>
+                <div class="filtro-tabela">
+                    <img src="{{ url_for('static', filename='uploads/calendar-azul.png') }}" alt="">
 
-                <button class="filtro-tabela" type="button">
-                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/etiqueta-preta.png') }}" alt="">
-                    <span>Todas as categorias</span>
-                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
-                </button>
+                    <select id="filtro-mes">
+                        <option value="todos">Todos os meses</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
 
-                <button class="filtro-tabela" type="button">
-                    <img class="icone-filtro" src="{{ url_for('static', filename='uploads/barras-verticais.png') }}" alt="">
-                    <span>Ordenar por data</span>
-                    <img class="icone-select" src="{{ url_for('static', filename='uploads/chevron-baixo-preto.png') }}" alt="">
-                </button>
+                <div class="filtro-tabela">
+                    <img src="{{ url_for('static', filename='uploads/tag-azul-2.png') }}" alt="">
+
+                    <select id="filtro-categoria">
+                        <option value="todos">Todas as categorias</option>
+                    </select>
+                </div>
             </div>
 
             <div class="tabela-despesas-container">
@@ -169,52 +201,108 @@
                     <thead>
                         <tr>
                             <th>
-                                <div class="th-ordenacao">
+                                <button type="button" class="botao-ordenacao" id="ordenar-data">
                                     <span>Data</span>
-                                    <img class="setas" src="{{ url_for('static', filename='uploads/setas.png') }}" alt="">
-                                </div>
+                                    <img src="{{ url_for('static', filename='uploads/duas-setas-cinza.png') }}" alt="">
+                                </button>
                             </th>
+
                             <th>Categoria</th>
+
                             <th>Descrição</th>
+
                             <th>
-                                <div class="th-ordenacao">
+                                <button type="button" class="botao-ordenacao" id="ordenar-valor">
                                     <span>Valor</span>
-                                    <img class="setas" src="{{ url_for('static', filename='uploads/setas.png') }}" alt="">
-                                </div>
+                                    <img src="{{ url_for('static', filename='uploads/duas-setas-cinza.png') }}" alt="">
+                                </button>
                             </th>
+
+                            <th>Status</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
 
                     <tbody id="tabela-despesa">
-                        {% for despesa in despesas|default([]) %}
-                            <tr>
-                                <td>{{ despesa[1] }}</td>
-                                <td>{{ despesa[2] }}</td>
+                        {% for despesa in despesas %}
+                            <tr class="item-despesa" data-data="{{ despesa[1] }}" data-categoria="{{ despesa[2] }}" data-descricao="{{ despesa[3] }}" data-valor="{{ despesa[4] }}">
+                                <td>{{ despesa[1].strftime('%d/%m/%Y') }}</td>
+
+                                <td>
+                                    {% if despesa[6] and despesa[7] %}
+                                        <div class="categoria-tabela" style="background-color: #{{ despesa[6] }}20; color: #{{ despesa[6] }};">
+                                            <span class="icone-categoria-tabela" style="background-color: #{{ despesa[6] }}; -webkit-mask-image: url('{{ url_for('static', filename='svg/' ~ despesa[7]) }}'); mask-image: url('{{ url_for('static', filename='svg/' ~ despesa[7]) }}');"></span>
+                                            <span>{{ despesa[2] }}</span>
+                                        </div>
+                                    {% else %}
+                                        <div class="categoria-tabela categoria-sem-cor">
+                                            <span>{{ despesa[2] }}</span>
+                                        </div>
+                                    {% endif %}
+                                </td>
+
                                 <td>{{ despesa[3] }}</td>
-                                <td>{{ "R$ %.2f"|format(despesa[4]) }}</td>
+
+                                <td class="valor-tabela">{{ "R$ %.2f"|format(despesa[4]) }}</td>
+
+                                <td>
+                                    {% if despesa[5] == 1 %}
+                                        <span class="status-despesa ativo">Ativo</span>
+                                    {% else %}
+                                        <span class="status-despesa inativo">Inativo</span>
+                                    {% endif %}
+                                </td>
+
                                 <td>
                                     <div class="acoes-despesa">
-                                        <a href="{{ url_for('editar_movimentacao', id=despesa[0]) }}">Editar</a>
+                                        {% if despesa[5] == 1 %}
+                                            <a href="{{ url_for('editar_movimentacao', id=despesa[0]) }}" title="Editar">
+                                                <img src="{{ url_for('static', filename='uploads/edit.png') }}" alt="Editar">
+                                            </a>
 
-                                        <form action="{{ url_for('inativar_movimentacao', id=despesa[0]) }}" method="POST">
-                                            {% if despesa[5] == 1 %}
-                                                <input type="hidden" name="ativar" value="0">
-                                                <button type="submit">Inativar</button>
-                                            {% else %}
-                                                <input type="hidden" name="ativar" value="1">
-                                                <button type="submit">Ativar</button>
-                                            {% endif %}
-                                        </form>
-
-                                        <form action="{{ url_for('excluir_movimentacao', id=despesa[0]) }}"
-                                              method="POST"
-                                              onsubmit="return confirm('Deseja realmente excluir esta despesa?')">
-                                            <button type="submit" title="Excluir">
-                                                Excluir
+                                            <button type="button" class="abrir-modal-exclusao" data-url="{{ url_for('excluir_movimentacao', id=despesa[0]) }}" title="Excluir">
+                                                <img src="{{ url_for('static', filename='uploads/trash.png') }}" alt="Excluir">
                                             </button>
-                                        </form>
+
+                                            <form action="{{ url_for('inativar_movimentacao', id=despesa[0]) }}" method="POST">
+                                                <input type="hidden" name="ativar" value="0">
+                                                <button type="submit" class="inativar-despesa">Inativar</button>
+                                            </form>
+                                        {% else %}
+                                            <form action="{{ url_for('inativar_movimentacao', id=despesa[0]) }}" method="POST">
+                                                <input type="hidden" name="ativar" value="1">
+                                                <button type="submit" class="ativar-despesa">Ativar</button>
+                                            </form>
+                                        {% endif %}
                                     </div>
+
+                                    <details class="acoes-despesa-mobile">
+                                        <summary>›</summary>
+
+                                        <div class="menu-acoes-despesa-mobile">
+                                            {% if despesa[5] == 1 %}
+                                                <a href="{{ url_for('editar_movimentacao', id=despesa[0]) }}">
+                                                    <img src="{{ url_for('static', filename='uploads/edit.png') }}" alt="">
+                                                    <span>Editar despesa</span>
+                                                </a>
+
+                                                <button type="button" class="abrir-modal-exclusao" data-url="{{ url_for('excluir_movimentacao', id=despesa[0]) }}">
+                                                    <img src="{{ url_for('static', filename='uploads/trash.png') }}" alt="">
+                                                    <span>Excluir despesa</span>
+                                                </button>
+
+                                                <form action="{{ url_for('inativar_movimentacao', id=despesa[0]) }}" method="POST">
+                                                    <input type="hidden" name="ativar" value="0">
+                                                    <button type="submit" class="inativar-despesa">Inativar despesa</button>
+                                                </form>
+                                            {% else %}
+                                                <form action="{{ url_for('inativar_movimentacao', id=despesa[0]) }}" method="POST">
+                                                    <input type="hidden" name="ativar" value="1">
+                                                    <button type="submit" class="ativar-despesa">Ativar despesa</button>
+                                                </form>
+                                            {% endif %}
+                                        </div>
+                                    </details>
                                 </td>
                             </tr>
                         {% endfor %}
@@ -223,5 +311,89 @@
             </div>
         </section>
     </main>
+
+    <nav class="menu-mobile-despesas">
+        <a href="{{ url_for('dashboard') }}" class="item-menu-mobile">
+            <img src="{{ url_for('static', filename='uploads/perfil-dashboard.png') }}" alt="">
+            <span>Dashboard</span>
+        </a>
+
+        <a href="{{ url_for('rendimentos') }}" class="item-menu-mobile">
+            <img src="{{ url_for('static', filename='uploads/perfil-rendimentos.png') }}" alt="">
+            <span>Rendimentos</span>
+        </a>
+
+        <a href="{{ url_for('movimentacao') }}" class="adicionar-mobile">
+            <img src="{{ url_for('static', filename='uploads/mais-branco.png') }}" alt="">
+        </a>
+
+        <a href="{{ url_for('despesas') }}" class="item-menu-mobile ativo">
+            <img src="{{ url_for('static', filename='uploads/perfil-despesas.png') }}" alt="">
+            <span>Despesas</span>
+        </a>
+
+        <details class="mais-mobile">
+            <summary class="item-menu-mobile">
+                <img src="{{ url_for('static', filename='uploads/mais.png') }}" alt="">
+                <span>Mais</span>
+            </summary>
+
+            <div class="opcoes-mais-mobile">
+                <a href="{{ url_for('dia_trabalhado') }}">Dia Trabalhado</a>
+                <a href="{{ url_for('servico_extra') }}">Serviço Extra</a>
+                <a href="{{ url_for('todas_categorias') }}">Categorias</a>
+                <a href="#">Relatórios</a>
+                <a href="#">Histórico Semanal</a>
+            </div>
+        </details>
+    </nav>
+
+    <div class="fundo-modal-exclusao" id="modal-exclusao">
+        <div class="modal-exclusao">
+            <h2>Confirmar Exclusão</h2>
+            <p>Tem certeza que deseja excluir registro?</p>
+
+            <div class="botoes-modal-exclusao">
+                <form id="form-exclusao" method="POST">
+                    <button type="submit" class="confirmar-exclusao">Confirmar</button>
+                </form>
+
+                <button type="button" class="cancelar-exclusao" id="cancelar-exclusao">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/filtro_despesas.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/modal_exclusao.js') }}"></script>
+
+    <script>
+        // Seleciona o botão que abre a pesquisa na versão mobile
+        var botaoPesquisaDespesa = document.querySelector("#botao-pesquisa-despesa")
+
+        // Seleciona a seção que contém a tabela de despesas
+        var minhasDespesas = document.querySelector(".minhas-despesas")
+
+        // Seleciona o campo onde o usuário digita a descrição da despesa
+        var buscarDespesa = document.querySelector("#buscar-despesa")
+
+        // Executa esta função quando o botão de pesquisa é clicado
+        botaoPesquisaDespesa.addEventListener("click", function () {
+
+            // Verifica se a pesquisa já está aberta
+            if (minhasDespesas.classList.contains("busca-aberta")) {
+
+                // Se estiver aberta, remove a classe e fecha a pesquisa
+                minhasDespesas.classList.remove("busca-aberta")
+
+            } else {
+
+                // Se estiver fechada, adiciona a classe e abre a pesquisa
+                minhasDespesas.classList.add("busca-aberta")
+
+                // Coloca o cursor automaticamente no campo de pesquisa
+                buscarDespesa.focus()
+            }
+        })
+    </script>
 </body>
 </html>

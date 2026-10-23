@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="pt-br" dir="ltr">
 <head>
@@ -9,7 +10,6 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/movimentacao.css') }}">
 </head>
 <body class="pagina-sistema">
-
     <aside class="menu-lateral">
         <a href="{{ url_for('dashboard') }}" class="seta-voltar">‹</a>
         <img class="logo-perfil" src="{{ url_for('static', filename='uploads/logo-horizontal.png') }}" alt="Bolso em Dia">
@@ -100,6 +100,7 @@
                 <div class="icone-movimentacao">
                     <img src="{{ url_for('static', filename='uploads/mala-verde.png') }}" alt="">
                 </div>
+
                 <div>
                     <h2>Cadastrar Movimentação</h2>
                     <p>Preencha todos os dados necessários</p>
@@ -109,15 +110,15 @@
             <form action="{{ url_for('cadastrar_movimentacao') }}" method="POST">
                 <div class="linha-campos">
                     <div class="grupo-movimentacao valor-movimentacao">
-                        <label>Valor <span>*</span></label>
+                        <label>Valor recebido <span>*</span></label>
 
                         <div class="campo-valor">
                             <strong>R$</strong>
-                            <input type="number" name="valor" min="0.01" step="0.01" placeholder="0,00" required>
+                            <input type="text" name="valor" id="valor" inputmode="numeric" placeholder="0,00" required>
                         </div>
                     </div>
 
-                    <div class="grupo-movimentacao">
+                    <div class="grupo-movimentacao tipo-movimentacao">
                         <label>Tipo <span>*</span></label>
 
                         <select name="tipo" id="tipo" required onchange="filtrarCategorias()">
@@ -127,18 +128,19 @@
                         </select>
                     </div>
 
-                    <div class="grupo-movimentacao">
+                    <div class="grupo-movimentacao data-movimentacao">
                         <label>Data <span>*</span></label>
 
                         <div class="campo-data">
-                            <div class="icone-campo">
+                            <div class="icone-campo" onclick="document.getElementById('data-movimentacao').showPicker()" style="cursor: pointer;">
                                 <img src="{{ url_for('static', filename='uploads/calendar-cinza.png') }}" alt="">
                             </div>
-                            <input type="date" name="data" required>
+
+                            <input type="date" name="data" id="data-movimentacao" required>
                         </div>
                     </div>
 
-                    <div class="grupo-movimentacao">
+                    <div class="grupo-movimentacao categoria-movimentacao">
                         <label>Categoria <span>*</span></label>
 
                         <select name="categoria" id="categoria" required>
@@ -165,7 +167,7 @@
                     <div class="campo-descricao">
                         <img class="icone-descricao" src="{{ url_for('static', filename='uploads/document-cinza.png') }}" alt="">
                         <textarea name="descricao" maxlength="500" placeholder="Descreva os detalhes da movimentação..."></textarea>
-                        <span class="contador-descricao">0/500</span>
+                        <span class="contador-descricao">0/250</span>
                     </div>
                 </div>
 
@@ -177,68 +179,63 @@
         </section>
     </main>
 
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
+
     <script>
-        // pega o campo de tipo da movimentação
-        const tipo = document.getElementById('tipo');
+        {# máscara para deixar o input do valor com 0,00 #}
+        $("#valor").maskMoney({
+            thousands: ".",
+            decimal: ",",
+            precision: 2,
+            allowNegative: false,
+            allowZero: false
+        })
 
-        // pega o campo de categoria
-        const categoria = document.getElementById('categoria');
-
-        // pega o campo de descrição
-        const descricao = document.querySelector('textarea');
-
-        // pega o contador de caracteres
-        const contador = document.querySelector('.contador-descricao');
+        $("#valor").closest("form").on("submit", function() {
+            var valor = $("#valor").maskMoney("unmasked")[0]
+            $("#valor").val(valor.toFixed(2))
+        })
 
 
-        // filtra as categorias de acordo com o tipo selecionado
+        // Seleciona os campos de tipo, categoria, descrição e contador
+        const tipo = document.getElementById('tipo')
+        const categoria = document.getElementById('categoria')
+        const descricao = document.querySelector('textarea')
+        const contador = document.querySelector('.contador-descricao')
+
+        // Filtra as categorias conforme o tipo selecionado
         function filtrarCategorias() {
+            const tipoSelecionado = tipo.value
+            categoria.value = '' // Limpa a categoria selecionada
 
-            // pega o valor do tipo escolhido
-            const tipoSelecionado = tipo.value;
-
-            // limpa a categoria selecionada
-            categoria.value = '';
-
-            // passa por todas as opções do campo de categoria
+            // Percorre todas as opções de categoria
             for (let opcao of categoria.options) {
+                const tipoCategoria = opcao.getAttribute('data-tipo')
 
-                // pega o tipo da categoria
-                const tipoCategoria = opcao.getAttribute('data-tipo');
-
-                // opções sem tipo continuam aparecendo
+                // Mantém visíveis as opções gerais ou do tipo selecionado
                 if (!tipoCategoria) {
-                    opcao.hidden = false;
-
-                // mostra a categoria se ela tiver o mesmo tipo selecionado
+                    opcao.hidden = false
                 } else if (tipoCategoria == tipoSelecionado) {
-                    opcao.hidden = false;
-
-                // esconde categorias de outro tipo
+                    opcao.hidden = false
                 } else {
-                    opcao.hidden = true;
+                    opcao.hidden = true
                 }
             }
         }
 
-
-        // verifica quando o usuário troca a categoria
+        // Redireciona para o cadastro de uma nova categoria quando selecionada
         categoria.addEventListener('change', function() {
-
-            // se escolher "Adicionar Categoria", abre a página de cadastro de categoria
             if (categoria.value == 'nova') {
-                window.location.href = "{{ url_for('nova_categoria') }}";
+                window.location.href = "{{ url_for('nova_categoria') }}"
             }
-        });
+        })
 
-
-        // atualiza o contador enquanto o usuário digita a descrição
+        // Atualiza o contador conforme o usuário digita na descrição
         descricao.addEventListener('input', function() {
+            contador.textContent = descricao.value.length + '/250'
+        })
 
-            // mostra a quantidade de caracteres digitados
-            contador.textContent = descricao.value.length + '/500';
-        });
     </script>
-
 </body>
 </html>
