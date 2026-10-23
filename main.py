@@ -319,24 +319,25 @@ def dashboard():
 
         cursor.execute("""SELECT DATA_TRABALHO, PACOTES_COLETADOS FROM DIA_TRABALHADO WHERE ID_USUARIO = ? AND STATUS = 1""", (id_usuario,))
         dias_trabalhados = cursor.fetchall()
-
+# percorre os dias trabalhados do usuário e calcula quantos dias ele
+        # trabalhou e quantos pacotes coletou em cada ano.
         for dia in dias_trabalhados:
             data_trabalho = dia[0]
             pacotes = dia[1] or 0
-            ano = data_trabalho.year
+            ano = data_trabalho.year #Aqui ele está pegando a data de dia trabalhado mas só os anos
 
-            if ano not in anos_registrados:
+            if ano not in anos_registrados: #Verifica se o ano esta cadastrado
                 anos_registrados.append(ano)
 
-            if ano not in dias_por_ano:
+            if ano not in dias_por_ano: #Verifica se o ano já existe no dicionário dias_por_ano.
                 dias_por_ano[ano] = 0
 
-            if ano not in pacotes_por_ano:
+            if ano not in pacotes_por_ano: #Verifica se o ano já está registrado no dicionário de pacotes
                 pacotes_por_ano[ano] = 0
 
-            dias_por_ano[ano] += 1
-            pacotes_por_ano[ano] += pacotes
-
+            dias_por_ano[ano] += 1 #Contador para registrar dias trabalhados existem em cada ano
+            pacotes_por_ano[ano] += pacotes #contador para registrar dias trabalhados existentes em cada ano
+    #Está selecionando os dias trabalhados, movimentação e serviços extras(no caso a data, tipo e o valor dessas movimentações)
         cursor.execute("""
             SELECT
                 COALESCE(D.DATA_TRABALHO, S.DATA_SERVICO, M.DATA_MOVIMENTACAO),
@@ -349,83 +350,90 @@ def dashboard():
             ON S.ID_SERVICO_EXTRA = M.ID_SERVICO_EXTRA
             WHERE M.ID_USUARIO = ? AND M.STATUS = 1
         """, (id_usuario,))
-        movimentacoes = cursor.fetchall()
+        movimentacoes = cursor.fetchall()#ele está tranformando o movimentação em uma lista
+#quarta
+        for movimentacao in movimentacoes: #Vai percorrer cada tipo de movimentação do usuário
+            data_movimentacao = movimentacao[0]#1 indice da lista
+            valor = float(movimentacao[1] or 0)#2indice da lista
+            tipo = movimentacao[2]#3indice da lista
 
-        for movimentacao in movimentacoes:
-            data_movimentacao = movimentacao[0]
-            valor = float(movimentacao[1] or 0)
-            tipo = movimentacao[2]
-
-            ano_movimentacao = data_movimentacao.year
-            mes = data_movimentacao.month - 1
+            ano_movimentacao = data_movimentacao.year #criamos a variavel com o ano da movimentação
+            mes = data_movimentacao.month - 1 #criamos uma variavel para o mes da movimentação
 
             if ano_movimentacao not in anos_registrados:
-                anos_registrados.append(ano_movimentacao)
+                anos_registrados.append(ano_movimentacao) #aqui esta adicionando o ano na lista de anos registrados
 
-            if ano_movimentacao not in ganhos_por_ano:
-                ganhos_por_ano[ano_movimentacao] = [0] * 12
-
+            if ano_movimentacao not in ganhos_por_ano:#verifica se o ano ja existe em ganhos por ano
+                ganhos_por_ano[ano_movimentacao] = [0] * 12 #o código cria uma entrada para aquele ano contendo uma lista com 12 zeros.
+# faz a mesma coisa que em ganhos na parte de despesas
             if ano_movimentacao not in despesas_por_ano:
                 despesas_por_ano[ano_movimentacao] = [0] * 12
+#terceira
+            if tipo == 1: #despesa
+                despesas_por_ano[ano_movimentacao][mes] += valor #Adicionamos o valor em despesas
 
-            if tipo == 1:
-                despesas_por_ano[ano_movimentacao][mes] += valor
+            elif tipo == 2:#receita
+                ganhos_por_ano[ano_movimentacao][mes] += valor #Adicionamos o valo em receitas
 
-            elif tipo == 2:
-                ganhos_por_ano[ano_movimentacao][mes] += valor
-
+#garantir que todos os anos registrados tenham seus espaços preparados nos dicionários
         for ano in anos_registrados:
-            if ano not in ganhos_por_ano:
+            if ano not in ganhos_por_ano:#Aqui, o código verifica se aquele ano já existe no dicionário ganhos_por_ano.
                 ganhos_por_ano[ano] = [0] * 12
 
-            if ano not in despesas_por_ano:
+            if ano not in despesas_por_ano:#Aqui, o código verifica se aquele ano já existe no dicionário despesas_por_ano.
                 despesas_por_ano[ano] = [0] * 12
 
-            if ano not in dias_por_ano:
+            if ano not in dias_por_ano:#verificação para garantir que cada ano tenha um contador de dias trabalhados no dicionário,
+                                    # mesmo que nenhum dia tenha sido contado para aquele ano anteriormente.
                 dias_por_ano[ano] = 0
 
-            if ano not in pacotes_por_ano:
+            if ano not in pacotes_por_ano:#verificação para garantir que cada ano tenha um contador de pacotes coletados no dicionário,
+                # mesmo que nenhum pacote tenha sido contado para aquele ano anteriormente.
                 pacotes_por_ano[ano] = 0
 
-        anos_registrados.sort(reverse=True)
+        anos_registrados.sort(reverse=True) #organiza o código para que ele apareça do mais novo para os dias mais antigos
 
         dados_por_ano = {}
 
-        for ano in anos_registrados:
-            ano_anterior_selecionado = ano - 1
+        for ano in anos_registrados: #começa a pegar os dados de cada ano e compará-los com os dados do ano anterior.
+            ano_anterior_selecionado = ano - 1 #calcula o ano imediatamente anterior ao ano atual do loop.
 
-            ganhos_ano_selecionado = ganhos_por_ano.get(ano, [0] * 12)
-            despesas_ano_selecionado = despesas_por_ano.get(ano, [0] * 12)
+            ganhos_ano_selecionado = ganhos_por_ano.get(ano, [0] * 12) #A primeira linha procura a lista de ganhos do ano no dicionário ganhos_por_ano e se caso não tiver ele vai pegar e colocar 12 zeros
+            despesas_ano_selecionado = despesas_por_ano.get(ano, [0] * 12) #faz a mesma coisa de ganho
 
-            ganhos_ano_anterior = ganhos_por_ano.get(ano_anterior_selecionado, [0] * 12)
+            #Parte da porcentagem que fica em baixo em relação ao ano anterior
+            ganhos_ano_anterior = ganhos_por_ano.get(ano_anterior_selecionado, [0] * 12) #faz a mesma coisa de ganho, mas de um ano anterior
             despesas_ano_anterior = despesas_por_ano.get(ano_anterior_selecionado, [0] * 12)
 
-            ganho_ano_selecionado = sum(ganhos_ano_selecionado)
-            despesas_ano_selecionado = sum(despesas_ano_selecionado)
-
+            #Anteriormente, os ganhos e as despesas foram guardados em listas com 12 posições, uma para cada mês e a função sum() soma todos os números de uma lista.
+            ganho_ano_selecionado = sum(ganhos_ano_selecionado) #segunda
+            despesas_ano_selecionado = sum(despesas_ano_selecionado)#segunda
+            #faz a mesma coisa so que dos anos anteriores
             ganho_ano_anterior = sum(ganhos_ano_anterior)
             despesas_ano_anterior = sum(despesas_ano_anterior)
 
-            saldo_ano_selecionado = ganho_ano_selecionado - despesas_ano_selecionado
-            saldo_ano_anterior = ganho_ano_anterior - despesas_ano_anterior
+            #DIV do saldo primeira
+            saldo_ano_selecionado = ganho_ano_selecionado - despesas_ano_selecionado #calcula o saldo do ano
+            saldo_ano_anterior = ganho_ano_anterior - despesas_ano_anterior #calcula o saldo do ano anterior
 
-            dias_ano_selecionado = dias_por_ano.get(ano, 0)
-            dias_ano_anterior = dias_por_ano.get(ano_anterior_selecionado, 0)
-
-            pacotes_ano_selecionado = pacotes_por_ano.get(ano, 0)
-            pacotes_ano_anterior = pacotes_por_ano.get(ano_anterior_selecionado, 0)
+            #DIV de dias trabalhados
+            dias_ano_selecionado = dias_por_ano.get(ano, 0) #aqui ele recebe os dias trabalhados do ano selecionado, se caso não tiver deixa no 0
+            dias_ano_anterior = dias_por_ano.get(ano_anterior_selecionado, 0)#é a mesma coisa, mas do ano anterior
+            #DIV de pacotes selecionados
+            pacotes_ano_selecionado = pacotes_por_ano.get(ano, 0)#aqui ele pega os pacotes coletados do ano selecionado, ou deixa em 0
+            pacotes_ano_anterior = pacotes_por_ano.get(ano_anterior_selecionado, 0)#mesma coisa mas do ano anterior
 
             if dias_ano_selecionado > 0:
-                media_ano_selecionado = ganho_ano_selecionado / dias_ano_selecionado
+                media_ano_selecionado = ganho_ano_selecionado / dias_ano_selecionado #DIV de media
             else:
                 media_ano_selecionado = 0
 
-            if dias_ano_anterior > 0:
-                media_ano_anterior = ganho_ano_anterior / dias_ano_anterior
+            if dias_ano_anterior > 0:#media de dias para a porcentagem da paret de baixo
+                media_ano_anterior = ganho_ano_anterior / dias_ano_anterior #media de dias para a porcentagem da parte de baixo
             else:
                 media_ano_anterior = 0
 
-            if ganho_ano_anterior > 0:
+            if ganho_ano_anterior > 0: # percentual do ano selecionado
                 ganho_percentual_selecionado = round(abs((ganho_ano_selecionado - ganho_ano_anterior) / ganho_ano_anterior * 100))
             else:
                 ganho_percentual_selecionado = 0

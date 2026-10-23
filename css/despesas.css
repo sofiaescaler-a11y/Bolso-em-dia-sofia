@@ -1,0 +1,1362 @@
+.cabecalho-despesa {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.titulo-despesa {
+    padding: 18px 10px 25px;
+}
+
+.titulo-despesa p {
+    color: var(--cinza-escuro);
+    font-size: 14px;
+}
+
+.titulo-despesa h1 {
+    margin: 2px 0;
+    color: var(--azul-cinzento-escuro);
+    font-size: 32px;
+}
+
+.btn-adicionar-despesa {
+    height: 46px;
+    padding: 0 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    background-color: var(--verde-escuro);
+    color: var(--branco);
+    border: none;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.btn-adicionar-despesa img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.cards-despesas {
+    width: 100%;
+    display: flex;
+    gap: 8px;
+}
+
+.card-despesa {
+    flex: 1;
+    min-width: 0;
+    min-height: 105px;
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-claro);
+    border-radius: 10px;
+}
+
+.card-despesa > div:last-child {
+    min-width: 0;
+}
+
+.icone-card-despesa {
+    width: 56px;
+    height: 56px;
+    flex: 0 0 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 9px;
+}
+
+.icone-card-despesa.vermelho {
+    background-color: var(--vermelho-clarinho);
+}
+
+.icone-card-despesa.verde {
+    background-color: var(--verde-clarinho);
+}
+
+.icone-card-despesa img {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
+.card-despesa p {
+    margin-bottom: 5px;
+    color: var(--azul-cinzento-escuro);
+    font-size: 13px;
+}
+
+.card-despesa h2 {
+    font-size: 25px;
+    white-space: nowrap;
+}
+
+.valor-despesa {
+    color: var(--vermelho);
+}
+
+.quantidade-despesa {
+    color: var(--verde-escuro);
+}
+
+.filtros-periodo {
+    width: 100%;
+    min-height: 52px;
+    margin: 18px 0 10px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-claro);
+    border-radius: 8px;
+}
+
+.filtro-periodo {
+    height: 30px;
+    padding: 0 20px;
+    background-color: var(--branco);
+    color: var(--azul-cinzento-escuro);
+    border: 1px solid var(--cinza-claro);
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.filtro-periodo:hover {
+    background-color: var(--verde-clarinho);
+}
+
+.filtro-periodo.ativo {
+    background-color: var(--verde-clarinho);
+    color: var(--verde-escuro);
+    border-color: var(--verde-clarinho);
+}
+
+.minhas-despesas {
+    width: 100%;
+    padding: 16px 18px;
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-claro);
+    border-radius: 10px;
+}
+
+.topo-minhas-despesas {
+    width: 100%;
+    margin-bottom: 16px;
+}
+
+.titulo-minhas-despesas h2 {
+    color: var(--azul-cinzento-escuro);
+    font-size: 21px;
+}
+
+.titulo-minhas-despesas h2 span {
+    display: none;
+}
+
+.icone-minhas-despesas,
+.pesquisa-mobile-despesas {
+    display: none;
+}
+
+.filtros-tabela {
+    width: 100%;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.campo-busca {
+    width: 40%;
+    height: 42px;
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    border: 1px solid var(--cinza-claro);
+    border-radius: 8px;
+}
+
+.campo-busca img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.campo-busca input {
+    width: 100%;
+    border: none;
+    outline: none;
+    color: var(--azul-cinzento-escuro);
+    font-family: inherit;
+    font-size: 12px;
+}
+
+.campo-busca input::placeholder {
+    color: var(--cinza);
+}
+
+.filtro-tabela {
+    height: 42px;
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-claro);
+    border-radius: 8px;
+}
+
+.filtro-tabela > img {
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+}
+
+.filtro-tabela select {
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--azul-cinzento-escuro);
+    font-family: inherit;
+    font-size: 11px;
+    cursor: pointer;
+}
+
+.filtro-tabela select option {
+    color: var(--azul-cinzento-escuro);
+    background-color: var(--branco);
+}
+
+.tabela-despesas-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabela-despesas {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tabela-despesas thead {
+    background-color: var(--cinza-claro);
+}
+
+.tabela-despesas th {
+    height: 38px;
+    padding: 0 18px;
+    color: var(--cinza-escuro);
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.tabela-despesas th:first-child {
+    border-radius: 6px 0 0 6px;
+}
+
+.tabela-despesas th:last-child {
+    border-radius: 0 6px 6px 0;
+    text-align: center;
+}
+
+.botao-ordenacao {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    background: none;
+    border: none;
+    color: var(--cinza-escuro);
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.botao-ordenacao img {
+    width: 10px;
+    height: 16px;
+    object-fit: contain;
+}
+
+.tabela-despesas td {
+    height: 56px;
+    padding: 0 18px;
+    color: var(--cinza-escuro);
+    font-size: 12px;
+    border-bottom: 1px solid var(--cinza-claro);
+}
+
+.tabela-despesas td:last-child {
+    text-align: center;
+}
+
+.categoria-tabela {
+    width: fit-content;
+    padding: 4px 7px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    border-radius: 5px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.categoria-sem-cor {
+    background-color: var(--verde-clarinho);
+    color: var(--verde-escuro);
+}
+
+.icone-categoria-tabela {
+    width: 13px;
+    height: 13px;
+    display: block;
+    -webkit-mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    -webkit-mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: contain;
+}
+
+.status-despesa {
+    margin-top: 4px;
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.status-despesa.ativo {
+    color: var(--verde-escuro);
+}
+
+.status-despesa.inativo {
+    color: var(--vermelho);
+}
+
+.valor-tabela {
+    color: var(--verde-medio) !important;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.acoes-despesa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.acoes-despesa form {
+    margin: 0;
+}
+
+.acoes-despesa a,
+.acoes-despesa button {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.acoes-despesa img {
+    width: 21px;
+    height: 21px;
+    object-fit: contain;
+}
+
+.acoes-despesa .inativar-despesa,
+.acoes-despesa .ativar-despesa {
+    height: 34px;
+    padding: 0 12px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.acoes-despesa .inativar-despesa {
+    background-color: var(--branco);
+    color: var(--vermelho);
+    border: 1px solid var(--vermelho);
+}
+
+.acoes-despesa .ativar-despesa {
+    background-color: var(--verde-escuro);
+    color: var(--branco);
+    border: 1px solid var(--verde-escuro);
+}
+
+.acoes-despesa-mobile {
+    display: none;
+}
+
+.menu-mobile-despesas {
+    display: none;
+}
+
+/* TABLET */
+@media (min-width: 767px) and (max-width: 1023px) {
+    .titulo-despesa {
+        padding: 16px 4px 20px;
+    }
+
+    .titulo-despesa h1 {
+        font-size: 28px;
+    }
+
+    .titulo-despesa p {
+        font-size: 12px;
+    }
+
+    .btn-adicionar-despesa {
+        height: 42px;
+        padding: 0 12px;
+        font-size: 11px;
+    }
+
+    .cards-despesas {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1.15fr;
+        gap: 7px;
+    }
+
+    .card-despesa {
+        width: 100%;
+        min-width: 0;
+        min-height: 95px;
+        padding: 8px;
+        gap: 7px;
+    }
+
+    .icone-card-despesa {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+    }
+
+    .icone-card-despesa img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .card-despesa > div:last-child {
+        min-width: 0;
+    }
+
+    .card-despesa p {
+        font-size: 9px;
+        white-space: nowrap;
+    }
+
+    .card-despesa h2 {
+        font-size: 18px;
+    }
+
+    .filtros-tabela {
+        flex-wrap: wrap;
+    }
+
+    .campo-busca {
+        width: 100%;
+    }
+
+    .filtro-tabela {
+        flex: 1;
+    }
+
+    .tabela-despesas-container {
+        overflow-x: hidden;
+    }
+
+    .tabela-despesas {
+        width: 100%;
+        min-width: 0;
+        table-layout: fixed;
+    }
+
+    .tabela-despesas th,
+    .tabela-despesas td {
+        padding-left: 6px;
+        padding-right: 6px;
+        font-size: 9px;
+    }
+
+    .tabela-despesas th:nth-child(1),
+    .tabela-despesas td:nth-child(1) {
+        width: 19%;
+    }
+
+    .tabela-despesas th:nth-child(2),
+    .tabela-despesas td:nth-child(2) {
+        width: 23%;
+    }
+
+    .tabela-despesas th:nth-child(3),
+    .tabela-despesas td:nth-child(3) {
+        width: 25%;
+    }
+
+    .tabela-despesas th:nth-child(4),
+    .tabela-despesas td:nth-child(4) {
+        width: 18%;
+    }
+
+    .tabela-despesas th:nth-child(5),
+    .tabela-despesas td:nth-child(5) {
+        width: 15%;
+    }
+
+    .categoria-tabela {
+        max-width: 100%;
+        padding: 3px 4px;
+        font-size: 8px;
+    }
+
+    .categoria-tabela span:last-child {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .status-despesa {
+        font-size: 8px;
+    }
+
+    .valor-tabela {
+        font-size: 9px;
+        white-space: nowrap;
+    }
+
+    .acoes-despesa {
+        gap: 5px;
+    }
+
+    .acoes-despesa img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .acoes-despesa .inativar-despesa,
+    .acoes-despesa .ativar-despesa {
+        height: 29px;
+        padding: 0 6px;
+        font-size: 8px;
+    }
+}
+
+/* CELULAR - BASE */
+@media (max-width: 766px) {
+    body {
+        padding-bottom: 58px;
+        overflow-x: hidden;
+        background-color: var(--branco);
+    }
+
+    .saudacao-despesa {
+        display: none;
+    }
+
+    .cabecalho-despesa {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .titulo-despesa {
+        padding: 7px 0 10px;
+    }
+
+    .titulo-despesa h1 {
+        margin: 0;
+        font-size: 27px;
+        line-height: 31px;
+    }
+
+    .titulo-despesa p {
+        margin-top: 2px;
+        font-size: 11px;
+        line-height: 15px;
+    }
+
+    .cabecalho-despesa form {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .btn-adicionar-despesa {
+        width: 100%;
+        height: 38px;
+        font-size: 11px;
+        border-radius: 6px;
+    }
+
+    .btn-adicionar-despesa img {
+        width: 16px;
+        height: 16px;
+    }
+
+    .cards-despesas {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .card-despesa {
+        width: 100%;
+        min-height: 69px;
+        padding: 10px;
+        gap: 8px;
+        border-radius: 7px;
+    }
+
+    .icone-card-despesa {
+        width: 46px;
+        height: 46px;
+        flex: 0 0 46px;
+        border-radius: 7px;
+    }
+
+    .icone-card-despesa img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .card-despesa p {
+        margin-bottom: 0;
+        font-size: 10px;
+        white-space: normal;
+    }
+
+    .card-despesa h2 {
+        font-size: 17px;
+        line-height: 20px;
+    }
+
+    .filtros-periodo {
+        min-height: 39px;
+        margin: 10px 0;
+        padding: 4px;
+        gap: 6px;
+        border: none;
+    }
+
+    .filtro-periodo {
+        flex: 1;
+        min-width: 0;
+        height: 28px;
+        padding: 0 3px;
+        font-size: 8px;
+        white-space: nowrap;
+    }
+
+    .minhas-despesas {
+        padding: 9px;
+        border-radius: 8px;
+    }
+
+    .topo-minhas-despesas {
+        height: 43px;
+        margin-bottom: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .titulo-minhas-despesas {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+    }
+
+    .icone-minhas-despesas {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--verde-clarinho);
+        border-radius: 7px;
+    }
+
+    .icone-minhas-despesas img {
+        width: 25px;
+        height: 25px;
+        object-fit: contain;
+    }
+
+    .titulo-minhas-despesas h2 {
+        font-size: 15px;
+        white-space: nowrap;
+    }
+
+    .titulo-minhas-despesas h2 span {
+        display: inline;
+    }
+
+    .pesquisa-mobile-despesas {
+        width: 28px;
+        height: 28px;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: none;
+        border: none;
+        cursor: pointer;
+    }
+
+    .pesquisa-mobile-despesas img {
+        width: 23px;
+        height: 23px;
+        object-fit: contain;
+    }
+
+    .filtros-tabela {
+        display: none;
+    }
+
+    .minhas-despesas.busca-aberta .filtros-tabela {
+        margin: 5px 0 8px;
+        display: block;
+    }
+
+    .minhas-despesas.busca-aberta .campo-busca {
+        width: 100%;
+        height: 38px;
+        display: flex;
+    }
+
+    .minhas-despesas.busca-aberta .filtro-tabela {
+        display: none;
+    }
+
+    .tabela-despesas-container {
+        overflow: visible;
+    }
+
+    .tabela-despesas,
+    .tabela-despesas tbody {
+        width: 100%;
+        display: block;
+    }
+
+    .tabela-despesas thead {
+        display: none;
+    }
+
+    .tabela-despesas tr {
+        width: 100%;
+        min-height: 58px;
+        padding: 7px 3px;
+        position: relative;
+        display: grid;
+        grid-template-columns: 90px minmax(0, 1fr) auto 12px;
+        grid-template-rows: auto auto;
+        column-gap: 5px;
+        row-gap: 3px;
+        border-bottom: 1px solid var(--cinza-claro);
+    }
+
+    .tabela-despesas td {
+        width: auto;
+        height: auto;
+        min-width: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        color: var(--cinza-escuro);
+        font-size: 9px;
+        line-height: 12px;
+        border: none;
+    }
+
+    .tabela-despesas td:nth-child(1) {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: end;
+        font-size: 10px;
+    }
+
+    .tabela-despesas td:nth-child(2) {
+        grid-column: 1;
+        grid-row: 2;
+        align-self: start;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 2px;
+    }
+
+    .tabela-despesas td:nth-child(3) {
+        grid-column: 2;
+        grid-row: 1 / 3;
+        align-self: center;
+    }
+
+    .tabela-despesas td:nth-child(4) {
+        grid-column: 3;
+        grid-row: 1 / 3;
+        align-self: center;
+        font-size: 11px;
+    }
+
+    .tabela-despesas td:nth-child(5) {
+        grid-column: 4;
+        grid-row: 1 / 3;
+        align-self: center;
+        justify-content: center;
+        overflow: visible;
+    }
+
+    .categoria-tabela {
+        max-width: 88px;
+        padding: 2px 5px;
+        gap: 3px;
+        border-radius: 4px;
+        font-size: 7px;
+        white-space: nowrap;
+    }
+
+    .icone-categoria-tabela {
+        width: 9px;
+        height: 9px;
+        flex: 0 0 9px;
+    }
+
+    .status-despesa {
+        margin-top: 0;
+        font-size: 7px;
+    }
+
+    .acoes-despesa {
+        display: none;
+    }
+
+    .acoes-despesa-mobile {
+        display: block;
+        position: relative;
+    }
+
+    .acoes-despesa-mobile summary {
+        width: 12px;
+        height: 26px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        list-style: none;
+        color: var(--azul-cinzento-escuro);
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    .acoes-despesa-mobile summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .menu-acoes-despesa-mobile {
+        width: 145px;
+        padding: 5px;
+        position: absolute;
+        top: -12px;
+        right: 13px;
+        z-index: 30;
+        background-color: var(--branco);
+        border: 1px solid var(--cinza-claro);
+        border-radius: 7px;
+        box-shadow: 0 3px 9px rgba(0, 0, 0, 0.18);
+    }
+
+    .menu-acoes-despesa-mobile form {
+        width: 100%;
+        margin: 0;
+    }
+
+    .menu-acoes-despesa-mobile a,
+    .menu-acoes-despesa-mobile button {
+        width: 100%;
+        min-height: 31px;
+        padding: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: none;
+        border: none;
+        border-radius: 4px;
+        font-family: inherit;
+        font-size: 9px;
+        text-align: left;
+        text-decoration: none;
+    }
+
+    .menu-acoes-despesa-mobile a {
+        color: #0068B5;
+    }
+
+    .menu-acoes-despesa-mobile button {
+        color: var(--vermelho);
+        cursor: pointer;
+    }
+
+    .menu-acoes-despesa-mobile .ativar-despesa {
+        color: var(--verde-escuro);
+        font-weight: 700;
+    }
+
+    .menu-acoes-despesa-mobile .inativar-despesa {
+        color: var(--vermelho);
+        font-weight: 700;
+    }
+
+    .menu-acoes-despesa-mobile a:hover,
+    .menu-acoes-despesa-mobile button:hover {
+        background-color: var(--branco-acinzentado);
+        text-decoration: none;
+    }
+
+    .menu-acoes-despesa-mobile img {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+    }
+
+    .menu-mobile-despesas {
+        width: 100%;
+        height: 58px;
+        padding: 3px 8px;
+        position: fixed;
+        left: 0;
+        bottom: 0;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        overflow: visible;
+        background-color: var(--branco);
+        border-top: 1px solid var(--cinza-claro);
+    }
+
+    .item-menu-mobile {
+        width: 50px;
+        height: 50px;
+        padding: 3px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        color: var(--azul-cinzento-escuro);
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .item-menu-mobile img {
+        width: 22px;
+        height: 22px;
+        object-fit: contain;
+    }
+
+    .item-menu-mobile span {
+        font-size: 7px;
+    }
+
+    .item-menu-mobile.ativo {
+        background-color: var(--verde-clarinho);
+        color: var(--verde-escuro);
+        font-weight: 700;
+    }
+
+    .item-menu-mobile:hover {
+        text-decoration: none;
+    }
+
+    .adicionar-mobile {
+        width: 38px;
+        height: 38px;
+        flex: 0 0 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--verde-escuro);
+        border-radius: 50%;
+    }
+
+    .adicionar-mobile img {
+        width: 23px;
+        height: 23px;
+        object-fit: contain;
+    }
+
+    .mais-mobile {
+        width: 50px;
+        position: relative;
+    }
+
+    .mais-mobile summary {
+        list-style: none;
+        cursor: pointer;
+    }
+
+    .mais-mobile summary::-webkit-details-marker {
+        display: none;
+    }
+
+    .opcoes-mais-mobile {
+        width: 145px;
+        padding: 8px 0;
+        position: absolute;
+        right: -4px;
+        bottom: 57px;
+        background-color: var(--branco);
+        border: 1px solid var(--cinza-claro);
+        border-radius: 8px;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.18);
+    }
+
+    .opcoes-mais-mobile a {
+        padding: 7px 12px;
+        display: block;
+        color: var(--azul-cinzento-escuro);
+        font-size: 9px;
+        text-decoration: none;
+    }
+
+    .opcoes-mais-mobile a:hover {
+        background-color: var(--verde-clarinho);
+        text-decoration: none;
+    }
+}
+
+/* MOBILE L */
+@media (min-width: 375px) and (max-width: 424px) {
+    .titulo-despesa h1 {
+        font-size: 27px;
+    }
+
+    .tabela-despesas tr {
+        grid-template-columns: 100px minmax(0, 1fr) auto 12px;
+    }
+
+    .categoria-tabela {
+        max-width: 98px;
+    }
+
+    .status-despesa {
+        font-size: 7px;
+    }
+}
+
+/* MOBILE M */
+@media (min-width: 320px) and (max-width: 374px) {
+    body {
+        padding-bottom: 56px;
+    }
+
+    .titulo-despesa h1 {
+        font-size: 24px;
+        line-height: 28px;
+    }
+
+    .titulo-despesa p {
+        font-size: 10px;
+    }
+
+    .card-despesa {
+        min-height: 66px;
+    }
+
+    .icone-card-despesa {
+        width: 43px;
+        height: 43px;
+        flex-basis: 43px;
+    }
+
+    .icone-card-despesa img {
+        width: 26px;
+        height: 26px;
+    }
+
+    .card-despesa p {
+        font-size: 9px;
+    }
+
+    .card-despesa h2 {
+        font-size: 16px;
+    }
+
+    .filtro-periodo {
+        font-size: 7px;
+    }
+
+    .titulo-minhas-despesas h2 {
+        font-size: 14px;
+    }
+
+    .tabela-despesas tr {
+        grid-template-columns: 84px minmax(0, 1fr) auto 12px;
+        column-gap: 4px;
+    }
+
+    .tabela-despesas td:nth-child(1) {
+        font-size: 9px;
+    }
+
+    .tabela-despesas td:nth-child(3) {
+        font-size: 8px;
+        line-height: 11px;
+    }
+
+    .tabela-despesas td:nth-child(4) {
+        font-size: 10px;
+    }
+
+    .categoria-tabela {
+        max-width: 82px;
+        font-size: 6px;
+    }
+
+    .status-despesa {
+        font-size: 6px;
+    }
+
+    .menu-mobile-despesas {
+        height: 56px;
+        padding: 3px 5px;
+    }
+
+    .item-menu-mobile {
+        width: 46px;
+        height: 48px;
+    }
+
+    .item-menu-mobile img {
+        width: 21px;
+        height: 21px;
+    }
+
+    .item-menu-mobile span {
+        font-size: 6px;
+    }
+
+    .adicionar-mobile {
+        width: 36px;
+        height: 36px;
+        flex-basis: 36px;
+    }
+
+    .adicionar-mobile img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .mais-mobile {
+        width: 46px;
+    }
+
+    .opcoes-mais-mobile {
+        width: 140px;
+        bottom: 55px;
+    }
+
+    .opcoes-mais-mobile a {
+        font-size: 8px;
+    }
+}
+
+/* MOBILE S */
+@media (max-width: 319px) {
+    body {
+        padding-bottom: 54px;
+    }
+
+    .titulo-despesa {
+        padding-bottom: 8px;
+    }
+
+    .titulo-despesa h1 {
+        font-size: 21px;
+        line-height: 24px;
+    }
+
+    .titulo-despesa p {
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .btn-adicionar-despesa {
+        height: 36px;
+        font-size: 10px;
+    }
+
+    .cards-despesas {
+        gap: 5px;
+    }
+
+    .card-despesa {
+        min-height: 62px;
+        padding: 8px;
+        gap: 6px;
+    }
+
+    .icone-card-despesa {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+    }
+
+    .icone-card-despesa img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .card-despesa p {
+        font-size: 8px;
+    }
+
+    .card-despesa h2 {
+        font-size: 14px;
+        line-height: 17px;
+    }
+
+    .filtros-periodo {
+        padding: 3px;
+        gap: 3px;
+    }
+
+    .filtro-periodo {
+        height: 26px;
+        padding: 0 2px;
+        font-size: 6px;
+    }
+
+    .minhas-despesas {
+        padding: 7px;
+    }
+
+    .icone-minhas-despesas {
+        width: 36px;
+        height: 36px;
+    }
+
+    .icone-minhas-despesas img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .titulo-minhas-despesas h2 {
+        font-size: 13px;
+    }
+
+    .pesquisa-mobile-despesas {
+        width: 26px;
+        height: 26px;
+    }
+
+    .pesquisa-mobile-despesas img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .tabela-despesas tr {
+        min-height: 54px;
+        padding: 6px 1px;
+        grid-template-columns: 76px minmax(0, 1fr) auto 11px;
+        column-gap: 3px;
+    }
+
+    .tabela-despesas td:nth-child(1) {
+        font-size: 8px;
+    }
+
+    .tabela-despesas td:nth-child(3) {
+        font-size: 7px;
+        line-height: 10px;
+    }
+
+    .tabela-despesas td:nth-child(4) {
+        font-size: 9px;
+    }
+
+    .categoria-tabela {
+        max-width: 74px;
+        padding: 2px 3px;
+        font-size: 5px;
+    }
+
+    .icone-categoria-tabela {
+        width: 8px;
+        height: 8px;
+        flex-basis: 8px;
+    }
+
+    .status-despesa {
+        font-size: 5px;
+    }
+
+    .menu-acoes-despesa-mobile {
+        width: 135px;
+    }
+
+    .menu-mobile-despesas {
+        height: 54px;
+        padding: 2px 3px;
+    }
+
+    .item-menu-mobile {
+        width: 43px;
+        height: 46px;
+        padding: 2px;
+        gap: 1px;
+    }
+
+    .item-menu-mobile img {
+        width: 19px;
+        height: 19px;
+    }
+
+    .item-menu-mobile span {
+        font-size: 5px;
+    }
+
+    .adicionar-mobile {
+        width: 34px;
+        height: 34px;
+        flex-basis: 34px;
+    }
+
+    .adicionar-mobile img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .mais-mobile {
+        width: 43px;
+    }
+
+    .opcoes-mais-mobile {
+        width: 132px;
+        bottom: 53px;
+    }
+
+    .opcoes-mais-mobile a {
+        padding: 6px 10px;
+        font-size: 7px;
+    }
+}

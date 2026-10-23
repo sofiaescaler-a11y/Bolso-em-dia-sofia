@@ -1,0 +1,982 @@
+body {
+    background-color: var(--branco-acinzentado);
+}
+
+.titulo-movimentacao {
+    padding: 18px 10px 20px;
+}
+
+.titulo-movimentacao p {
+    font-size: 14px;
+}
+
+.titulo-movimentacao h1 {
+    margin: 3px 0;
+    font-size: 32px;
+}
+
+.card-movimentacao {
+    width: 100%;
+    padding: 22px;
+    background-color: var(--branco);
+    border: 1px solid var(--cinza);
+    border-radius: 18px;
+}
+
+.cabecalho-movimentacao {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 38px;
+}
+
+.icone-movimentacao {
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--verde-clarinho);
+    border-radius: 10px;
+}
+
+.icone-movimentacao img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.cabecalho-movimentacao h2 {
+    font-size: 26px;
+}
+
+.cabecalho-movimentacao p {
+    font-size: 15px;
+}
+
+.linha-campos {
+    width: 100%;
+    display: flex;
+    gap: 18px;
+}
+
+.grupo-movimentacao {
+    width: 25%;
+}
+
+.grupo-movimentacao label,
+.grupo-descricao label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--azul-cinzento-escuro);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.grupo-movimentacao label span,
+.grupo-descricao label span {
+    color: var(--vermelho);
+}
+
+.grupo-movimentacao select,
+.grupo-movimentacao > input {
+    width: 100%;
+    height: 51px;
+    padding: 0 12px;
+    border: 1px solid var(--cinza);
+    border-radius: 9px;
+    background-color: var(--branco);
+    color: var(--azul-cinzento-escuro);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.campo-valor {
+    width: 100%;
+    height: 51px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid var(--cinza);
+    border-radius: 9px;
+}
+
+.campo-valor strong {
+    width: 60px;
+    flex: 0 0 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cinza-claro);
+    color: var(--cinza-escuro);
+}
+
+.campo-valor input {
+    width: 100%;
+    min-width: 0;
+    padding: 0 12px;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+.campo-data {
+    width: 100%;
+    height: 51px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid var(--cinza);
+    border-radius: 9px;
+    background-color: var(--branco);
+}
+
+.icone-campo {
+    width: 50px;
+    flex: 0 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cinza-claro);
+}
+
+.icone-campo img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+}
+
+.campo-data input {
+    width: 100%;
+    min-width: 0;
+    padding: 0 12px;
+    border: none;
+    outline: none;
+    background-color: var(--branco);
+    color: var(--azul-cinzento-escuro);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.ver-categorias {
+    display: inline-block;
+    margin-top: 7px;
+    color: var(--verde-escuro);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.ver-categorias:hover {
+    text-decoration: underline;
+}
+
+.grupo-descricao {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.campo-descricao {
+    width: 100%;
+    position: relative;
+}
+
+.campo-descricao textarea {
+    width: 100%;
+    height: 190px;
+    padding: 16px 16px 16px 54px;
+    resize: none;
+    border: 1px solid var(--cinza);
+    border-radius: 9px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.icone-descricao {
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    object-fit: contain;
+    z-index: 2;
+}
+
+.contador-descricao {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    color: var(--cinza-escuro);
+    font-size: 10px;
+}
+
+.botoes-movimentacao {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancelar-movimentacao,
+.registrar-movimentacao {
+    width: 190px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.cancelar-movimentacao {
+    background-color: var(--branco);
+    color: var(--azul-cinzento-escuro);
+    border: 1px solid var(--cinza);
+}
+
+.cancelar-movimentacao:hover {
+    text-decoration: none;
+}
+
+.registrar-movimentacao {
+    background-color: var(--verde-escuro);
+    color: var(--branco);
+    border: none;
+    cursor: pointer;
+}
+
+.campo-valor input[type="number"]::-webkit-inner-spin-button,
+.campo-valor input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.campo-valor input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.campo-data input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+/* TABLET */
+@media (min-width: 767px) and (max-width: 1023px) {
+    .titulo-movimentacao h1 {
+        font-size: 28px;
+    }
+
+    .card-movimentacao {
+        padding: 18px;
+    }
+
+    .cabecalho-movimentacao {
+        margin-bottom: 28px;
+    }
+
+    .cabecalho-movimentacao h2 {
+        font-size: 22px;
+    }
+
+    .linha-campos {
+        flex-wrap: wrap;
+        gap: 14px;
+    }
+
+    .grupo-movimentacao {
+        width: calc(50% - 7px);
+    }
+}
+
+/* CELULAR - BASE */
+@media (max-width: 766px) {
+    body {
+        background-color: var(--branco);
+    }
+
+    .titulo-movimentacao {
+        padding: 4px 0 11px;
+    }
+
+    .titulo-movimentacao p {
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .titulo-movimentacao h1 {
+        margin: 0;
+        font-size: 25px;
+        line-height: 29px;
+    }
+
+    .card-movimentacao {
+        padding: 9px;
+        border-radius: 8px;
+    }
+
+    .cabecalho-movimentacao {
+        gap: 7px;
+        margin-bottom: 17px;
+    }
+
+    .icone-movimentacao {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        border-radius: 7px;
+    }
+
+    .icone-movimentacao img {
+        width: 29px;
+        height: 29px;
+    }
+
+    .cabecalho-movimentacao > div:last-child {
+        min-width: 0;
+    }
+
+    .cabecalho-movimentacao h2 {
+        font-size: 17px;
+        line-height: 20px;
+    }
+
+    .cabecalho-movimentacao p {
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .linha-campos {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .grupo-movimentacao {
+        width: 100%;
+    }
+
+    .valor-movimentacao {
+        order: 1;
+    }
+
+    .data-movimentacao {
+        order: 2;
+    }
+
+    .tipo-movimentacao {
+        order: 3;
+    }
+
+    .categoria-movimentacao {
+        order: 4;
+    }
+
+    .grupo-movimentacao label,
+    .grupo-descricao label {
+        margin-bottom: 5px;
+        font-size: 13px;
+    }
+
+    .grupo-movimentacao select {
+        width: 100%;
+        height: 38px;
+        padding: 0 8px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .campo-valor,
+    .campo-data {
+        width: 100%;
+        height: 38px;
+        border-radius: 6px;
+    }
+
+    .campo-valor strong {
+        width: 42px;
+        flex: 0 0 42px;
+        font-size: 10px;
+    }
+
+    .campo-valor input,
+    .campo-data input {
+        min-width: 0;
+        padding: 0 9px;
+        font-size: 11px;
+    }
+
+    .icone-campo {
+        width: 40px;
+        flex: 0 0 40px;
+    }
+
+    .icone-campo img {
+        width: 21px;
+        height: 21px;
+    }
+
+    .ver-categorias {
+        display: none;
+    }
+
+    .grupo-descricao {
+        margin-top: 14px;
+    }
+
+    .campo-descricao textarea {
+        height: 185px;
+        padding: 10px 10px 22px 36px;
+        border-radius: 6px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .icone-descricao {
+        width: 18px;
+        height: 18px;
+        top: 10px;
+        left: 9px;
+    }
+
+    .contador-descricao {
+        right: 5px;
+        bottom: 5px;
+        font-size: 7px;
+    }
+
+    .botoes-movimentacao {
+        margin-top: 28px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancelar-movimentacao,
+    .registrar-movimentacao {
+        width: 100%;
+        height: 38px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .registrar-movimentacao {
+        order: 1;
+    }
+
+    .cancelar-movimentacao {
+        order: 2;
+    }
+}
+
+/* MOBILE L */
+@media (min-width: 375px) and (max-width: 424px) {
+    body {
+        background-color: var(--branco);
+    }
+
+    .titulo-movimentacao {
+        padding: 4px 0 11px;
+    }
+
+    .titulo-movimentacao p {
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .titulo-movimentacao h1 {
+        margin: 0;
+        font-size: 25px;
+        line-height: 29px;
+    }
+
+    .card-movimentacao {
+        padding: 9px;
+        border-radius: 8px;
+    }
+
+    .cabecalho-movimentacao {
+        gap: 7px;
+        margin-bottom: 17px;
+    }
+
+    .icone-movimentacao {
+        width: 48px;
+        height: 48px;
+        flex: 0 0 48px;
+        border-radius: 7px;
+    }
+
+    .icone-movimentacao img {
+        width: 29px;
+        height: 29px;
+    }
+
+    .cabecalho-movimentacao h2 {
+        font-size: 17px;
+        line-height: 20px;
+    }
+
+    .cabecalho-movimentacao p {
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .linha-campos {
+        flex-direction: column;
+        gap: 14px;
+    }
+
+    .grupo-movimentacao {
+        width: 100%;
+    }
+
+    .valor-movimentacao {
+        order: 1;
+    }
+
+    .data-movimentacao {
+        order: 2;
+    }
+
+    .tipo-movimentacao {
+        order: 3;
+    }
+
+    .categoria-movimentacao {
+        order: 4;
+    }
+
+    .grupo-movimentacao label,
+    .grupo-descricao label {
+        margin-bottom: 5px;
+        font-size: 13px;
+    }
+
+    .grupo-movimentacao select {
+        height: 38px;
+        padding: 0 8px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .campo-valor,
+    .campo-data {
+        height: 38px;
+        border-radius: 6px;
+    }
+
+    .campo-valor strong {
+        width: 42px;
+        flex-basis: 42px;
+        font-size: 10px;
+    }
+
+    .campo-valor input,
+    .campo-data input {
+        padding: 0 9px;
+        font-size: 11px;
+    }
+
+    .icone-campo {
+        width: 40px;
+        flex-basis: 40px;
+    }
+
+    .icone-campo img {
+        width: 21px;
+        height: 21px;
+    }
+
+    .ver-categorias {
+        display: none;
+    }
+
+    .grupo-descricao {
+        margin-top: 14px;
+    }
+
+    .campo-descricao textarea {
+        height: 185px;
+        padding: 10px 10px 22px 36px;
+        border-radius: 6px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .icone-descricao {
+        width: 18px;
+        height: 18px;
+        top: 10px;
+        left: 9px;
+    }
+
+    .contador-descricao {
+        right: 5px;
+        bottom: 5px;
+        font-size: 7px;
+    }
+
+    .botoes-movimentacao {
+        margin-top: 28px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancelar-movimentacao,
+    .registrar-movimentacao {
+        width: 100%;
+        height: 38px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .registrar-movimentacao {
+        order: 1;
+    }
+
+    .cancelar-movimentacao {
+        order: 2;
+    }
+}
+
+/* MOBILE M */
+@media (min-width: 320px) and (max-width: 374px) {
+    body {
+        background-color: var(--branco);
+    }
+
+    .titulo-movimentacao {
+        padding: 4px 0 10px;
+    }
+
+    .titulo-movimentacao p {
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .titulo-movimentacao h1 {
+        margin: 0;
+        font-size: 23px;
+        line-height: 27px;
+    }
+
+    .card-movimentacao {
+        padding: 8px;
+        border-radius: 8px;
+    }
+
+    .cabecalho-movimentacao {
+        gap: 6px;
+        margin-bottom: 16px;
+    }
+
+    .icone-movimentacao {
+        width: 46px;
+        height: 46px;
+        flex: 0 0 46px;
+        border-radius: 7px;
+    }
+
+    .icone-movimentacao img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .cabecalho-movimentacao h2 {
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    .cabecalho-movimentacao p {
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .linha-campos {
+        flex-direction: column;
+        gap: 13px;
+    }
+
+    .grupo-movimentacao {
+        width: 100%;
+    }
+
+    .valor-movimentacao {
+        order: 1;
+    }
+
+    .data-movimentacao {
+        order: 2;
+    }
+
+    .tipo-movimentacao {
+        order: 3;
+    }
+
+    .categoria-movimentacao {
+        order: 4;
+    }
+
+    .grupo-movimentacao label,
+    .grupo-descricao label {
+        margin-bottom: 5px;
+        font-size: 12px;
+    }
+
+    .grupo-movimentacao select {
+        height: 37px;
+        padding: 0 8px;
+        border-radius: 6px;
+        font-size: 10px;
+    }
+
+    .campo-valor,
+    .campo-data {
+        height: 37px;
+        border-radius: 6px;
+    }
+
+    .campo-valor strong {
+        width: 40px;
+        flex-basis: 40px;
+        font-size: 9px;
+    }
+
+    .campo-valor input,
+    .campo-data input {
+        padding: 0 8px;
+        font-size: 10px;
+    }
+
+    .icone-campo {
+        width: 38px;
+        flex-basis: 38px;
+    }
+
+    .icone-campo img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .ver-categorias {
+        display: none;
+    }
+
+    .grupo-descricao {
+        margin-top: 13px;
+    }
+
+    .campo-descricao textarea {
+        height: 180px;
+        padding: 9px 9px 21px 34px;
+        border-radius: 6px;
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .icone-descricao {
+        width: 17px;
+        height: 17px;
+        top: 9px;
+        left: 9px;
+    }
+
+    .contador-descricao {
+        right: 5px;
+        bottom: 5px;
+        font-size: 7px;
+    }
+
+    .botoes-movimentacao {
+        margin-top: 26px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancelar-movimentacao,
+    .registrar-movimentacao {
+        width: 100%;
+        height: 37px;
+        border-radius: 6px;
+        font-size: 10px;
+    }
+
+    .registrar-movimentacao {
+        order: 1;
+    }
+
+    .cancelar-movimentacao {
+        order: 2;
+    }
+}
+
+/* MOBILE S */
+@media (max-width: 319px) {
+    body {
+        background-color: var(--branco);
+    }
+
+    .titulo-movimentacao {
+        padding: 3px 0 8px;
+    }
+
+    .titulo-movimentacao p {
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .titulo-movimentacao h1 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 23px;
+    }
+
+    .card-movimentacao {
+        padding: 7px;
+        border-radius: 7px;
+    }
+
+    .cabecalho-movimentacao {
+        gap: 6px;
+        margin-bottom: 14px;
+    }
+
+    .icone-movimentacao {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        border-radius: 6px;
+    }
+
+    .icone-movimentacao img {
+        width: 25px;
+        height: 25px;
+    }
+
+    .cabecalho-movimentacao h2 {
+        font-size: 14px;
+        line-height: 17px;
+    }
+
+    .cabecalho-movimentacao p {
+        font-size: 8px;
+        line-height: 10px;
+    }
+
+    .linha-campos {
+        flex-direction: column;
+        gap: 11px;
+    }
+
+    .grupo-movimentacao {
+        width: 100%;
+    }
+
+    .valor-movimentacao {
+        order: 1;
+    }
+
+    .data-movimentacao {
+        order: 2;
+    }
+
+    .tipo-movimentacao {
+        order: 3;
+    }
+
+    .categoria-movimentacao {
+        order: 4;
+    }
+
+    .grupo-movimentacao label,
+    .grupo-descricao label {
+        margin-bottom: 4px;
+        font-size: 11px;
+    }
+
+    .grupo-movimentacao select {
+        height: 35px;
+        padding: 0 7px;
+        border-radius: 6px;
+        font-size: 9px;
+    }
+
+    .campo-valor,
+    .campo-data {
+        height: 35px;
+        border-radius: 6px;
+    }
+
+    .campo-valor strong {
+        width: 36px;
+        flex-basis: 36px;
+        font-size: 8px;
+    }
+
+    .campo-valor input,
+    .campo-data input {
+        padding: 0 7px;
+        font-size: 9px;
+    }
+
+    .icone-campo {
+        width: 35px;
+        flex-basis: 35px;
+    }
+
+    .icone-campo img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .ver-categorias {
+        display: none;
+    }
+
+    .grupo-descricao {
+        margin-top: 11px;
+    }
+
+    .campo-descricao textarea {
+        height: 165px;
+        padding: 8px 8px 20px 31px;
+        border-radius: 6px;
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .icone-descricao {
+        width: 16px;
+        height: 16px;
+        top: 8px;
+        left: 8px;
+    }
+
+    .contador-descricao {
+        right: 4px;
+        bottom: 4px;
+        font-size: 6px;
+    }
+
+    .botoes-movimentacao {
+        margin-top: 22px;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .cancelar-movimentacao,
+    .registrar-movimentacao {
+        width: 100%;
+        height: 35px;
+        border-radius: 6px;
+        font-size: 9px;
+    }
+
+    .registrar-movimentacao {
+        order: 1;
+    }
+
+    .cancelar-movimentacao {
+        order: 2;
+    }
+}

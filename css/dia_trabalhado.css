@@ -1,0 +1,968 @@
+.titulo-dia {
+    padding: 18px 10px 20px;
+}
+
+.titulo-dia p {
+    font-size: 14px;
+}
+
+.titulo-dia h1 {
+    margin: 3px 0;
+    font-size: 32px;
+}
+
+.card-dia {
+    width: 100%;
+    min-height: 450px;
+    padding: 28px;
+    background-color: var(--branco);
+    border: 1px solid var(--cinza-claro);
+    border-radius: 18px;
+}
+
+.cabecalho-dia {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 45px;
+}
+
+.icone-dia {
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--verde-clarinho);
+    border-radius: 10px;
+}
+
+.icone-dia img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.cabecalho-dia h2 {
+    font-size: 26px;
+}
+
+.cabecalho-dia p {
+    margin-top: 3px;
+    color: var(--cinza-escuro);
+    font-size: 14px;
+}
+
+.grupo-dia {
+    width: 100%;
+    margin-bottom: 28px;
+}
+
+.grupo-dia label {
+    display: block;
+    margin-bottom: 8px;
+    color: var(--azul-cinzento-escuro);
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.grupo-dia label span {
+    color: var(--vermelho);
+}
+
+.campo-data {
+    width: 100%;
+    height: 52px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--cinza-claro);
+    border-radius: 9px;
+}
+
+.campo-data input {
+    width: 100%;
+    height: 100%;
+    padding: 0 55px 0 14px;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: var(--azul-cinzento-escuro);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.campo-data img {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    right: 14px;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.campo-data input::-webkit-calendar-picker-indicator {
+    width: 32px;
+    height: 32px;
+    position: absolute;
+    right: 14px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.campo-pacotes {
+    width: 100%;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--cinza-claro);
+    border-radius: 9px;
+}
+
+.campo-pacotes input {
+    width: 100%;
+    height: 100%;
+    padding: 0 14px;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: var(--azul-cinzento-escuro);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.campo-pacotes img {
+    width: 32px;
+    height: 32px;
+    margin-right: 14px;
+    object-fit: contain;
+}
+
+.botoes-dia {
+    margin-top: 45px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.cancelar-dia,
+.registrar-dia {
+    width: 170px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.cancelar-dia {
+    background-color: var(--branco);
+    color: var(--azul-cinzento-escuro);
+    border: 1px solid var(--cinza);
+}
+
+.cancelar-dia:hover {
+    text-decoration: none;
+}
+
+.registrar-dia {
+    background-color: var(--verde-escuro);
+    color: var(--branco);
+    border: 1px solid var(--verde-escuro);
+    cursor: pointer;
+}
+
+/* TABLET */
+@media (min-width: 767px) and (max-width: 1023px) {
+    .titulo-dia h1 {
+        font-size: 28px;
+    }
+
+    .card-dia {
+        padding: 22px;
+    }
+
+    .cabecalho-dia h2 {
+        font-size: 22px;
+    }
+
+    .cabecalho-dia p {
+        font-size: 12px;
+    }
+}
+
+/* MOBILE L */
+@media (min-width: 375px) and (max-width: 424px) {
+    .titulo-dia {
+        padding: 4px 0 10px;
+    }
+
+    .titulo-dia > p:first-child {
+        display: none;
+    }
+
+    .titulo-dia h1 {
+        margin: 0;
+        font-size: 25px;
+        line-height: 29px;
+    }
+
+    .titulo-dia > p:last-child {
+        margin-top: 2px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .card-dia {
+        min-height: calc(100vh - 205px);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 8px;
+    }
+
+    .cabecalho-dia {
+        gap: 7px;
+        margin-bottom: 27px;
+        padding-bottom: 17px;
+        border-bottom: 1px solid var(--cinza-claro);
+    }
+
+    .icone-dia {
+        width: 46px;
+        height: 46px;
+        flex: 0 0 46px;
+        border-radius: 7px;
+    }
+
+    .icone-dia img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .cabecalho-dia > div:last-child {
+        min-width: 0;
+    }
+
+    .cabecalho-dia h2 {
+        font-size: 17px;
+        line-height: 20px;
+        white-space: nowrap;
+    }
+
+    .cabecalho-dia p {
+        margin-top: 1px;
+        font-size: 10px;
+        line-height: 12px;
+    }
+
+    .card-dia form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .grupo-dia {
+        margin-bottom: 28px;
+    }
+
+    .grupo-dia label {
+        margin-bottom: 5px;
+        font-size: 13px;
+    }
+
+    .campo-data,
+    .campo-pacotes {
+        height: 38px;
+        border-radius: 6px;
+    }
+
+    .campo-data input,
+    .campo-pacotes input {
+        font-size: 11px;
+    }
+
+    .campo-data img,
+    .campo-pacotes img {
+        width: 23px;
+        height: 23px;
+    }
+
+    .campo-data img {
+        right: 7px;
+    }
+
+    .campo-data input {
+        padding: 0 40px 0 9px;
+    }
+
+    .campo-data input::-webkit-calendar-picker-indicator {
+        width: 23px;
+        height: 23px;
+        right: 7px;
+    }
+
+    .campo-pacotes input {
+        padding: 0 9px;
+    }
+
+    .campo-pacotes img {
+        margin-right: 7px;
+    }
+
+    .botoes-dia {
+        margin-top: auto;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancelar-dia,
+    .registrar-dia {
+        width: 100%;
+        height: 38px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .registrar-dia {
+        order: 1;
+    }
+
+    .cancelar-dia {
+        order: 2;
+    }
+}
+
+/* MOBILE M */
+@media (min-width: 320px) and (max-width: 374px) {
+    .titulo-dia {
+        padding: 4px 0 9px;
+    }
+
+    .titulo-dia > p:first-child {
+        display: none;
+    }
+
+    .titulo-dia h1 {
+        margin: 0;
+        font-size: 23px;
+        line-height: 27px;
+    }
+
+    .titulo-dia > p:last-child {
+        margin-top: 2px;
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .card-dia {
+        min-height: calc(100vh - 195px);
+        padding: 9px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 7px;
+    }
+
+    .cabecalho-dia {
+        gap: 6px;
+        margin-bottom: 25px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid var(--cinza-claro);
+    }
+
+    .icone-dia {
+        width: 44px;
+        height: 44px;
+        flex: 0 0 44px;
+        border-radius: 7px;
+    }
+
+    .icone-dia img {
+        width: 27px;
+        height: 27px;
+    }
+
+    .cabecalho-dia > div:last-child {
+        min-width: 0;
+    }
+
+    .cabecalho-dia h2 {
+        font-size: 16px;
+        line-height: 19px;
+        white-space: nowrap;
+    }
+
+    .cabecalho-dia p {
+        margin-top: 1px;
+        font-size: 9px;
+        line-height: 11px;
+    }
+
+    .card-dia form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .grupo-dia {
+        margin-bottom: 27px;
+    }
+
+    .grupo-dia label {
+        margin-bottom: 5px;
+        font-size: 12px;
+    }
+
+    .campo-data,
+    .campo-pacotes {
+        height: 37px;
+        border-radius: 6px;
+    }
+
+    .campo-data input,
+    .campo-pacotes input {
+        font-size: 10px;
+    }
+
+    .campo-data img,
+    .campo-pacotes img {
+        width: 22px;
+        height: 22px;
+    }
+
+    .campo-data img {
+        right: 7px;
+    }
+
+    .campo-data input {
+        padding: 0 38px 0 8px;
+    }
+
+    .campo-data input::-webkit-calendar-picker-indicator {
+        width: 22px;
+        height: 22px;
+        right: 7px;
+    }
+
+    .campo-pacotes input {
+        padding: 0 8px;
+    }
+
+    .campo-pacotes img {
+        margin-right: 7px;
+    }
+
+    .botoes-dia {
+        margin-top: auto;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancelar-dia,
+    .registrar-dia {
+        width: 100%;
+        height: 37px;
+        border-radius: 6px;
+        font-size: 10px;
+    }
+
+    .registrar-dia {
+        order: 1;
+    }
+
+    .cancelar-dia {
+        order: 2;
+    }
+}
+
+/* MOBILE S */
+@media (max-width: 319px) {
+    .titulo-dia {
+        padding: 3px 0 8px;
+    }
+
+    .titulo-dia > p:first-child {
+        display: none;
+    }
+
+    .titulo-dia h1 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 23px;
+    }
+
+    .titulo-dia > p:last-child {
+        margin-top: 2px;
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .card-dia {
+        min-height: calc(100vh - 185px);
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 7px;
+    }
+
+    .cabecalho-dia {
+        gap: 6px;
+        margin-bottom: 22px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid var(--cinza-claro);
+    }
+
+    .icone-dia {
+        width: 40px;
+        height: 40px;
+        flex: 0 0 40px;
+        border-radius: 6px;
+    }
+
+    .icone-dia img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .cabecalho-dia > div:last-child {
+        min-width: 0;
+    }
+
+    .cabecalho-dia h2 {
+        font-size: 14px;
+        line-height: 17px;
+        white-space: nowrap;
+    }
+
+    .cabecalho-dia p {
+        margin-top: 1px;
+        font-size: 8px;
+        line-height: 10px;
+    }
+
+    .card-dia form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .grupo-dia {
+        margin-bottom: 24px;
+    }
+
+    .grupo-dia label {
+        margin-bottom: 4px;
+        font-size: 11px;
+    }
+
+    .campo-data,
+    .campo-pacotes {
+        height: 35px;
+        border-radius: 6px;
+    }
+
+    .campo-data input,
+    .campo-pacotes input {
+        font-size: 9px;
+    }
+
+    .campo-data img,
+    .campo-pacotes img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .campo-data img {
+        right: 6px;
+    }
+
+    .campo-data input {
+        padding: 0 35px 0 7px;
+    }
+
+    .campo-data input::-webkit-calendar-picker-indicator {
+        width: 20px;
+        height: 20px;
+        right: 6px;
+    }
+
+    .campo-pacotes input {
+        padding: 0 7px;
+    }
+
+    .campo-pacotes img {
+        margin-right: 6px;
+    }
+
+    .botoes-dia {
+        margin-top: auto;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .cancelar-dia,
+    .registrar-dia {
+        width: 100%;
+        height: 35px;
+        border-radius: 6px;
+        font-size: 9px;
+    }
+
+    .registrar-dia {
+        order: 1;
+    }
+
+    .cancelar-dia {
+        order: 2;
+    }
+}
+
+.pagina-editar-dia .card-dia {
+    min-height: 0;
+    padding: 28px;
+}
+
+.pagina-editar-dia .cabecalho-dia {
+    margin-bottom: 32px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--cinza-claro);
+}
+
+.pagina-editar-dia .card-dia form {
+    width: 100%;
+}
+
+.pagina-editar-dia .grupo-dia {
+    margin-bottom: 22px;
+}
+
+.pagina-editar-dia .campo-data,
+.pagina-editar-dia .campo-pacotes {
+    width: 100%;
+    height: 52px;
+    background-color: var(--branco);
+}
+
+.pagina-editar-dia .botoes-dia {
+    margin-top: 38px;
+}
+
+/* TABLET */
+@media (min-width: 767px) and (max-width: 1023px) {
+    .pagina-editar-dia .card-dia {
+        padding: 22px;
+    }
+
+    .pagina-editar-dia .cabecalho-dia {
+        margin-bottom: 28px;
+        padding-bottom: 20px;
+    }
+
+    .pagina-editar-dia .grupo-dia {
+        margin-bottom: 20px;
+    }
+
+    .pagina-editar-dia .botoes-dia {
+        margin-top: 32px;
+    }
+}
+
+/* CELULAR - BASE */
+@media (max-width: 766px) {
+    .pagina-editar-dia {
+        background-color: var(--branco);
+    }
+
+    .pagina-editar-dia .titulo-dia {
+        padding: 4px 0 10px;
+    }
+
+    .pagina-editar-dia .titulo-dia > p:first-child {
+        display: none;
+    }
+
+    .pagina-editar-dia .titulo-dia h1 {
+        margin: 0;
+        font-size: 25px;
+        line-height: 29px;
+    }
+
+    .pagina-editar-dia .titulo-dia > p:last-child {
+        margin-top: 2px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .pagina-editar-dia .card-dia {
+        min-height: calc(100vh - 205px);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 8px;
+        box-shadow: 0 3px 4px rgba(0, 0, 0, 0.18);
+    }
+
+    .pagina-editar-dia .cabecalho-dia {
+        gap: 7px;
+        margin-bottom: 27px;
+        padding-bottom: 17px;
+        border-bottom: 1px solid var(--cinza-claro);
+    }
+
+    .pagina-editar-dia .icone-dia {
+        width: 46px;
+        height: 46px;
+        flex: 0 0 46px;
+        border-radius: 7px;
+    }
+
+    .pagina-editar-dia .icone-dia img {
+        width: 28px;
+        height: 28px;
+    }
+
+    .pagina-editar-dia .cabecalho-dia > div:last-child {
+        min-width: 0;
+    }
+
+    .pagina-editar-dia .cabecalho-dia h2 {
+        font-size: 17px;
+        line-height: 20px;
+        white-space: nowrap;
+    }
+
+    .pagina-editar-dia .cabecalho-dia p {
+        margin-top: 1px;
+        font-size: 10px;
+        line-height: 12px;
+    }
+
+    .pagina-editar-dia .card-dia form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pagina-editar-dia .grupo-dia {
+        margin-bottom: 28px;
+    }
+
+    .pagina-editar-dia .grupo-dia label {
+        margin-bottom: 5px;
+        font-size: 13px;
+    }
+
+    .pagina-editar-dia .campo-data,
+    .pagina-editar-dia .campo-pacotes {
+        height: 38px;
+        border-radius: 6px;
+    }
+
+    .pagina-editar-dia .campo-data input,
+    .pagina-editar-dia .campo-pacotes input {
+        font-size: 11px;
+    }
+
+    .pagina-editar-dia .campo-data img,
+    .pagina-editar-dia .campo-pacotes img {
+        width: 23px;
+        height: 23px;
+    }
+
+    .pagina-editar-dia .campo-data img {
+        right: 7px;
+    }
+
+    .pagina-editar-dia .campo-data input {
+        padding: 0 40px 0 9px;
+    }
+
+    .pagina-editar-dia .campo-data input::-webkit-calendar-picker-indicator {
+        width: 23px;
+        height: 23px;
+        right: 7px;
+    }
+
+    .pagina-editar-dia .campo-pacotes input {
+        padding: 0 9px;
+    }
+
+    .pagina-editar-dia .campo-pacotes img {
+        margin-right: 7px;
+    }
+
+    .pagina-editar-dia .botoes-dia {
+        margin-top: auto;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .pagina-editar-dia .cancelar-dia,
+    .pagina-editar-dia .registrar-dia {
+        width: 100%;
+        height: 38px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .pagina-editar-dia .registrar-dia {
+        order: 1;
+    }
+
+    .pagina-editar-dia .cancelar-dia {
+        order: 2;
+    }
+}
+
+/* MOBILE L */
+@media (min-width: 375px) and (max-width: 424px) {
+    .pagina-editar-dia .titulo-dia h1 {
+        font-size: 25px;
+    }
+
+    .pagina-editar-dia .card-dia {
+        min-height: calc(100vh - 205px);
+    }
+}
+
+/* MOBILE M */
+@media (min-width: 320px) and (max-width: 374px) {
+    .pagina-editar-dia .titulo-dia h1 {
+        font-size: 23px;
+        line-height: 27px;
+    }
+
+    .pagina-editar-dia .titulo-dia > p:last-child {
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .pagina-editar-dia .card-dia {
+        min-height: calc(100vh - 195px);
+        padding: 9px;
+    }
+
+    .pagina-editar-dia .cabecalho-dia {
+        gap: 6px;
+        margin-bottom: 25px;
+        padding-bottom: 16px;
+    }
+
+    .pagina-editar-dia .icone-dia {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+    }
+
+    .pagina-editar-dia .icone-dia img {
+        width: 27px;
+        height: 27px;
+    }
+
+    .pagina-editar-dia .cabecalho-dia h2 {
+        font-size: 16px;
+        line-height: 19px;
+    }
+
+    .pagina-editar-dia .cabecalho-dia p {
+        font-size: 9px;
+        line-height: 11px;
+    }
+
+    .pagina-editar-dia .grupo-dia {
+        margin-bottom: 27px;
+    }
+
+    .pagina-editar-dia .grupo-dia label {
+        font-size: 12px;
+    }
+
+    .pagina-editar-dia .campo-data,
+    .pagina-editar-dia .campo-pacotes {
+        height: 37px;
+    }
+
+    .pagina-editar-dia .campo-data input,
+    .pagina-editar-dia .campo-pacotes input {
+        font-size: 10px;
+    }
+
+    .pagina-editar-dia .cancelar-dia,
+    .pagina-editar-dia .registrar-dia {
+        height: 37px;
+        font-size: 10px;
+    }
+}
+
+/* MOBILE S */
+@media (max-width: 319px) {
+    .pagina-editar-dia .titulo-dia h1 {
+        font-size: 20px;
+        line-height: 23px;
+    }
+
+    .pagina-editar-dia .titulo-dia > p:last-child {
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .pagina-editar-dia .card-dia {
+        min-height: calc(100vh - 185px);
+        padding: 8px;
+    }
+
+    .pagina-editar-dia .cabecalho-dia {
+        gap: 6px;
+        margin-bottom: 22px;
+        padding-bottom: 14px;
+    }
+
+    .pagina-editar-dia .icone-dia {
+        width: 40px;
+        height: 40px;
+        flex-basis: 40px;
+    }
+
+    .pagina-editar-dia .icone-dia img {
+        width: 24px;
+        height: 24px;
+    }
+
+    .pagina-editar-dia .cabecalho-dia h2 {
+        font-size: 14px;
+        line-height: 17px;
+    }
+
+    .pagina-editar-dia .cabecalho-dia p {
+        font-size: 8px;
+        line-height: 10px;
+    }
+
+    .pagina-editar-dia .grupo-dia {
+        margin-bottom: 24px;
+    }
+
+    .pagina-editar-dia .grupo-dia label {
+        font-size: 11px;
+    }
+
+    .pagina-editar-dia .campo-data,
+    .pagina-editar-dia .campo-pacotes {
+        height: 35px;
+    }
+
+    .pagina-editar-dia .campo-data input,
+    .pagina-editar-dia .campo-pacotes input {
+        font-size: 9px;
+    }
+
+    .pagina-editar-dia .cancelar-dia,
+    .pagina-editar-dia .registrar-dia {
+        height: 35px;
+        font-size: 9px;
+    }
+}

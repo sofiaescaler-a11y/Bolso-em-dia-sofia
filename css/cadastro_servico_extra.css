@@ -1,0 +1,1100 @@
+body {
+    background-color: var(--branco-acinzentado);
+}
+
+.titulo-servico {
+    padding: 18px 10px 20px;
+}
+
+.titulo-servico p {
+    font-size: 14px;
+}
+
+.titulo-servico h1 {
+    margin: 3px 0;
+    font-size: 32px;
+}
+
+.card-servico {
+    width: 100%;
+    padding: 22px;
+    background-color: var(--branco);
+    border: 1px solid var(--cinza);
+    border-radius: 18px;
+}
+
+.cabecalho-servico {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    margin-bottom: 38px;
+}
+
+.icone-servico {
+    width: 58px;
+    height: 58px;
+    flex: 0 0 58px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--verde-clarinho);
+    border-radius: 10px;
+}
+
+.icone-servico img {
+    width: 36px;
+    height: 36px;
+    object-fit: contain;
+}
+
+.cabecalho-servico h2 {
+    font-size: 26px;
+}
+
+.cabecalho-servico p {
+    font-size: 15px;
+}
+
+.grupo-servico {
+    width: 100%;
+}
+
+.grupo-servico label,
+.grupo-descricao label {
+    display: block;
+    margin-bottom: 7px;
+    color: var(--azul-cinzento-escuro);
+    font-size: 17px;
+    font-weight: 700;
+}
+
+.grupo-servico label span,
+.grupo-descricao label span {
+    color: var(--vermelho);
+}
+
+.grupo-servico > input {
+    width: 100%;
+    height: 51px;
+    padding: 0 12px;
+    border: 1px solid var(--cinza);
+    border-radius: 9px;
+    background-color: var(--branco);
+    color: var(--azul-cinzento-escuro);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.linha-servico {
+    width: 100%;
+    margin-top: 25px;
+    display: flex;
+    gap: 18px;
+}
+
+.linha-servico .grupo-servico {
+    width: 50%;
+}
+
+.campo-valor {
+    width: 100%;
+    height: 51px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid var(--cinza);
+    border-radius: 9px;
+}
+
+.campo-valor strong {
+    width: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cinza-claro);
+    color: var(--cinza-escuro);
+}
+
+.campo-valor input {
+    width: 100%;
+    padding: 0 12px;
+    border: none;
+    outline: none;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+.campo-data {
+    width: 100%;
+    height: 51px;
+    display: flex;
+    overflow: hidden;
+    border: 1px solid var(--cinza);
+    border-radius: 9px;
+    background-color: var(--branco);
+}
+
+.icone-campo {
+    width: 50px;
+    flex: 0 0 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--cinza-claro);
+}
+
+.icone-campo img {
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+}
+
+.campo-data input {
+    width: 100%;
+    padding: 0 12px;
+    border: none;
+    outline: none;
+    background-color: var(--branco);
+    color: var(--azul-cinzento-escuro);
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.grupo-descricao {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.campo-descricao {
+    width: 100%;
+    position: relative;
+}
+
+.campo-descricao textarea {
+    width: 100%;
+    height: 190px;
+    padding: 16px 16px 16px 54px;
+    resize: none;
+    border: 1px solid var(--cinza);
+    border-radius: 9px;
+    outline: none;
+    font-family: inherit;
+    font-size: 14px;
+}
+
+.icone-descricao {
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    object-fit: contain;
+    z-index: 2;
+}
+
+.contador-descricao {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    color: var(--cinza-escuro);
+    font-size: 10px;
+}
+
+.botoes-servico {
+    margin-top: 25px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.cancelar-servico,
+.registrar-servico {
+    width: 190px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.cancelar-servico {
+    background-color: var(--branco);
+    color: var(--azul-cinzento-escuro);
+    border: 1px solid var(--cinza);
+}
+
+.cancelar-servico:hover {
+    text-decoration: none;
+}
+
+.registrar-servico {
+    background-color: var(--verde-escuro);
+    color: var(--branco);
+    border: none;
+    cursor: pointer;
+}
+
+.campo-valor input[type="number"]::-webkit-inner-spin-button,
+.campo-valor input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.campo-valor input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+.campo-data input[type="date"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+/* TABLET */
+@media (min-width: 767px) and (max-width: 1023px) {
+    .titulo-servico h1 {
+        font-size: 28px;
+    }
+
+    .card-servico {
+        padding: 18px;
+    }
+
+    .cabecalho-servico {
+        margin-bottom: 28px;
+    }
+
+    .cabecalho-servico h2 {
+        font-size: 22px;
+    }
+
+    .linha-servico {
+        gap: 14px;
+    }
+}
+
+/* MOBILE L */
+@media (min-width: 375px) and (max-width: 424px) {
+    .titulo-servico {
+        padding: 4px 0 10px;
+    }
+
+    .titulo-servico > p:first-child {
+        display: none;
+    }
+
+    .titulo-servico h1 {
+        margin: 0;
+        font-size: 25px;
+        line-height: 29px;
+    }
+
+    .titulo-servico > p:last-child {
+        margin-top: 2px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .card-servico {
+        min-height: calc(100vh - 205px);
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 7px;
+    }
+
+    .cabecalho-servico {
+        display: none;
+    }
+
+    .card-servico form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .grupo-servico label,
+    .grupo-descricao label {
+        margin-bottom: 5px;
+        font-size: 13px;
+    }
+
+    .grupo-servico > input {
+        height: 48px;
+        padding: 7px 9px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .linha-servico {
+        margin-top: 18px;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .linha-servico .grupo-servico {
+        width: 100%;
+    }
+
+    .campo-valor,
+    .campo-data {
+        height: 38px;
+        border-radius: 6px;
+    }
+
+    .campo-valor strong {
+        width: 40px;
+        font-size: 10px;
+    }
+
+    .campo-valor input,
+    .campo-data input {
+        padding: 0 9px;
+        font-size: 11px;
+    }
+
+    .icone-campo {
+        width: 38px;
+        flex: 0 0 38px;
+    }
+
+    .icone-campo img {
+        width: 21px;
+        height: 21px;
+    }
+
+    .grupo-descricao {
+        margin-top: 18px;
+    }
+
+    .campo-descricao textarea {
+        height: 118px;
+        padding: 10px 10px 22px 36px;
+        border-radius: 6px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .icone-descricao {
+        width: 18px;
+        height: 18px;
+        top: 9px;
+        left: 9px;
+    }
+
+    .contador-descricao {
+        right: 5px;
+        bottom: 5px;
+        font-size: 7px;
+    }
+
+    .botoes-servico {
+        margin-top: auto;
+        padding-top: 18px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancelar-servico,
+    .registrar-servico {
+        width: 100%;
+        height: 38px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .registrar-servico {
+        order: 1;
+    }
+
+    .cancelar-servico {
+        order: 2;
+    }
+}
+
+/* MOBILE M */
+@media (min-width: 320px) and (max-width: 374px) {
+    .titulo-servico {
+        padding: 4px 0 9px;
+    }
+
+    .titulo-servico > p:first-child {
+        display: none;
+    }
+
+    .titulo-servico h1 {
+        margin: 0;
+        font-size: 23px;
+        line-height: 27px;
+    }
+
+    .titulo-servico > p:last-child {
+        margin-top: 2px;
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .card-servico {
+        min-height: calc(100vh - 195px);
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 7px;
+    }
+
+    .cabecalho-servico {
+        display: none;
+    }
+
+    .card-servico form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .grupo-servico label,
+    .grupo-descricao label {
+        margin-bottom: 5px;
+        font-size: 12px;
+    }
+
+    .grupo-servico > input {
+        height: 47px;
+        padding: 7px 8px;
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .linha-servico {
+        margin-top: 17px;
+        flex-direction: column;
+        gap: 17px;
+    }
+
+    .linha-servico .grupo-servico {
+        width: 100%;
+    }
+
+    .campo-valor,
+    .campo-data {
+        height: 37px;
+        border-radius: 6px;
+    }
+
+    .campo-valor strong {
+        width: 38px;
+        font-size: 9px;
+    }
+
+    .campo-valor input,
+    .campo-data input {
+        padding: 0 8px;
+        font-size: 10px;
+    }
+
+    .icone-campo {
+        width: 37px;
+        flex: 0 0 37px;
+    }
+
+    .icone-campo img {
+        width: 20px;
+        height: 20px;
+    }
+
+    .grupo-descricao {
+        margin-top: 17px;
+    }
+
+    .campo-descricao textarea {
+        height: 114px;
+        padding: 9px 9px 21px 34px;
+        border-radius: 6px;
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .icone-descricao {
+        width: 17px;
+        height: 17px;
+        top: 9px;
+        left: 9px;
+    }
+
+    .contador-descricao {
+        right: 5px;
+        bottom: 5px;
+        font-size: 7px;
+    }
+
+    .botoes-servico {
+        margin-top: auto;
+        padding-top: 16px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .cancelar-servico,
+    .registrar-servico {
+        width: 100%;
+        height: 37px;
+        border-radius: 6px;
+        font-size: 10px;
+    }
+
+    .registrar-servico {
+        order: 1;
+    }
+
+    .cancelar-servico {
+        order: 2;
+    }
+}
+
+/* MOBILE S */
+@media (max-width: 319px) {
+    .titulo-servico {
+        padding: 3px 0 8px;
+    }
+
+    .titulo-servico > p:first-child {
+        display: none;
+    }
+
+    .titulo-servico h1 {
+        margin: 0;
+        font-size: 20px;
+        line-height: 23px;
+    }
+
+    .titulo-servico > p:last-child {
+        margin-top: 2px;
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .card-servico {
+        min-height: calc(100vh - 185px);
+        padding: 7px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 7px;
+    }
+
+    .cabecalho-servico {
+        display: none;
+    }
+
+    .card-servico form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .grupo-servico label,
+    .grupo-descricao label {
+        margin-bottom: 4px;
+        font-size: 11px;
+    }
+
+    .grupo-servico > input {
+        height: 44px;
+        padding: 6px 7px;
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .linha-servico {
+        margin-top: 15px;
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .linha-servico .grupo-servico {
+        width: 100%;
+    }
+
+    .campo-valor,
+    .campo-data {
+        height: 35px;
+        border-radius: 6px;
+    }
+
+    .campo-valor strong {
+        width: 35px;
+        font-size: 8px;
+    }
+
+    .campo-valor input,
+    .campo-data input {
+        padding: 0 7px;
+        font-size: 9px;
+    }
+
+    .icone-campo {
+        width: 35px;
+        flex: 0 0 35px;
+    }
+
+    .icone-campo img {
+        width: 18px;
+        height: 18px;
+    }
+
+    .grupo-descricao {
+        margin-top: 15px;
+    }
+
+    .campo-descricao textarea {
+        height: 108px;
+        padding: 8px 8px 20px 31px;
+        border-radius: 6px;
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .icone-descricao {
+        width: 16px;
+        height: 16px;
+        top: 8px;
+        left: 8px;
+    }
+
+    .contador-descricao {
+        right: 4px;
+        bottom: 4px;
+        font-size: 6px;
+    }
+
+    .botoes-servico {
+        margin-top: auto;
+        padding-top: 14px;
+        flex-direction: column;
+        gap: 7px;
+    }
+
+    .cancelar-servico,
+    .registrar-servico {
+        width: 100%;
+        height: 35px;
+        border-radius: 6px;
+        font-size: 9px;
+    }
+
+    .registrar-servico {
+        order: 1;
+    }
+
+    .cancelar-servico {
+        order: 2;
+    }
+}
+
+.pagina-editar-servico .card-servico {
+    padding: 26px;
+}
+
+.pagina-editar-servico .cabecalho-servico {
+    margin-bottom: 30px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--cinza-claro);
+}
+
+.pagina-editar-servico .grupo-servico > input,
+.pagina-editar-servico .campo-valor,
+.pagina-editar-servico .campo-data {
+    height: 50px;
+}
+
+.pagina-editar-servico .campo-data {
+    position: relative;
+}
+
+.pagina-editar-servico .campo-data input {
+    padding: 0 50px 0 12px;
+}
+
+.pagina-editar-servico .calendario-servico {
+    width: 27px;
+    height: 27px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.pagina-editar-servico .campo-data input[type="date"]::-webkit-calendar-picker-indicator {
+    width: 28px;
+    height: 28px;
+    position: absolute;
+    right: 10px;
+    display: block;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.pagina-editar-servico .campo-descricao textarea {
+    height: 175px;
+}
+
+.pagina-editar-servico .botoes-servico {
+    margin-top: 30px;
+}
+
+/* TABLET */
+@media (min-width: 767px) and (max-width: 1023px) {
+    .pagina-editar-servico .card-servico {
+        padding: 20px;
+    }
+
+    .pagina-editar-servico .cabecalho-servico {
+        margin-bottom: 26px;
+        padding-bottom: 18px;
+    }
+
+    .pagina-editar-servico .campo-descricao textarea {
+        height: 160px;
+    }
+
+    .pagina-editar-servico .botoes-servico {
+        margin-top: 26px;
+    }
+}
+
+/* CELULAR - BASE */
+@media (max-width: 766px) {
+    .pagina-editar-servico {
+        background-color: var(--branco);
+    }
+
+    .pagina-editar-servico .titulo-servico {
+        padding: 4px 0 10px;
+    }
+
+    .pagina-editar-servico .titulo-servico > p:first-child {
+        display: none;
+    }
+
+    .pagina-editar-servico .titulo-servico h1 {
+        margin: 0;
+        font-size: 25px;
+        line-height: 29px;
+    }
+
+    .pagina-editar-servico .titulo-servico > p:last-child {
+        margin-top: 2px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .pagina-editar-servico .card-servico {
+        min-height: calc(100vh - 205px);
+        padding: 8px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 7px;
+        box-shadow: 0 3px 4px rgba(0, 0, 0, 0.18);
+    }
+
+    .pagina-editar-servico .cabecalho-servico {
+        display: none;
+    }
+
+    .pagina-editar-servico .card-servico form {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pagina-editar-servico .grupo-servico label,
+    .pagina-editar-servico .grupo-descricao label {
+        margin-bottom: 5px;
+        font-size: 13px;
+    }
+
+    .pagina-editar-servico .grupo-servico > input {
+        height: 48px;
+        padding: 7px 9px;
+        border-radius: 6px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .pagina-editar-servico .linha-servico {
+        margin-top: 18px;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .pagina-editar-servico .linha-servico .grupo-servico {
+        width: 100%;
+    }
+
+    .pagina-editar-servico .campo-valor,
+    .pagina-editar-servico .campo-data {
+        height: 38px;
+        border-radius: 6px;
+    }
+
+    .pagina-editar-servico .campo-valor strong {
+        width: 40px;
+        flex: 0 0 40px;
+        font-size: 10px;
+    }
+
+    .pagina-editar-servico .campo-valor input {
+        padding: 0 9px;
+        font-size: 11px;
+    }
+
+    .pagina-editar-servico .campo-data input {
+        padding: 0 38px 0 9px;
+        font-size: 11px;
+    }
+
+    .pagina-editar-servico .calendario-servico {
+        width: 22px;
+        height: 22px;
+        right: 7px;
+    }
+
+    .pagina-editar-servico .campo-data input[type="date"]::-webkit-calendar-picker-indicator {
+        width: 22px;
+        height: 22px;
+        right: 6px;
+    }
+
+    .pagina-editar-servico .grupo-descricao {
+        margin-top: 18px;
+    }
+
+    .pagina-editar-servico .campo-descricao textarea {
+        height: 118px;
+        padding: 10px 10px 22px 36px;
+        border-radius: 6px;
+        font-size: 11px;
+        line-height: 14px;
+    }
+
+    .pagina-editar-servico .icone-descricao {
+        width: 18px;
+        height: 18px;
+        top: 9px;
+        left: 9px;
+    }
+
+    .pagina-editar-servico .contador-descricao {
+        right: 5px;
+        bottom: 5px;
+        font-size: 7px;
+    }
+
+    .pagina-editar-servico .botoes-servico {
+        margin-top: auto;
+        padding-top: 18px;
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .pagina-editar-servico .cancelar-servico,
+    .pagina-editar-servico .registrar-servico {
+        width: 100%;
+        height: 38px;
+        border-radius: 6px;
+        font-size: 11px;
+    }
+
+    .pagina-editar-servico .registrar-servico {
+        order: 1;
+    }
+
+    .pagina-editar-servico .cancelar-servico {
+        order: 2;
+    }
+}
+
+/* MOBILE L */
+@media (min-width: 375px) and (max-width: 424px) {
+    .pagina-editar-servico .titulo-servico h1 {
+        font-size: 25px;
+    }
+
+    .pagina-editar-servico .card-servico {
+        min-height: calc(100vh - 205px);
+    }
+}
+
+/* MOBILE M */
+@media (min-width: 320px) and (max-width: 374px) {
+    .pagina-editar-servico .titulo-servico h1 {
+        font-size: 23px;
+        line-height: 27px;
+    }
+
+    .pagina-editar-servico .titulo-servico > p:last-child {
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .pagina-editar-servico .card-servico {
+        min-height: calc(100vh - 195px);
+        padding: 8px;
+    }
+
+    .pagina-editar-servico .grupo-servico label,
+    .pagina-editar-servico .grupo-descricao label {
+        font-size: 12px;
+    }
+
+    .pagina-editar-servico .grupo-servico > input {
+        height: 47px;
+        padding: 7px 8px;
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .pagina-editar-servico .linha-servico {
+        margin-top: 17px;
+        gap: 17px;
+    }
+
+    .pagina-editar-servico .campo-valor,
+    .pagina-editar-servico .campo-data {
+        height: 37px;
+    }
+
+    .pagina-editar-servico .campo-valor strong {
+        width: 38px;
+        flex-basis: 38px;
+        font-size: 9px;
+    }
+
+    .pagina-editar-servico .campo-valor input,
+    .pagina-editar-servico .campo-data input {
+        font-size: 10px;
+    }
+
+    .pagina-editar-servico .calendario-servico {
+        width: 21px;
+        height: 21px;
+    }
+
+    .pagina-editar-servico .grupo-descricao {
+        margin-top: 17px;
+    }
+
+    .pagina-editar-servico .campo-descricao textarea {
+        height: 114px;
+        padding: 9px 9px 21px 34px;
+        font-size: 10px;
+        line-height: 13px;
+    }
+
+    .pagina-editar-servico .icone-descricao {
+        width: 17px;
+        height: 17px;
+    }
+
+    .pagina-editar-servico .botoes-servico {
+        padding-top: 16px;
+    }
+
+    .pagina-editar-servico .cancelar-servico,
+    .pagina-editar-servico .registrar-servico {
+        height: 37px;
+        font-size: 10px;
+    }
+}
+
+/* MOBILE S */
+@media (max-width: 319px) {
+    .pagina-editar-servico .titulo-servico h1 {
+        font-size: 20px;
+        line-height: 23px;
+    }
+
+    .pagina-editar-servico .titulo-servico > p:last-child {
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .pagina-editar-servico .card-servico {
+        min-height: calc(100vh - 185px);
+        padding: 7px;
+    }
+
+    .pagina-editar-servico .grupo-servico label,
+    .pagina-editar-servico .grupo-descricao label {
+        font-size: 11px;
+    }
+
+    .pagina-editar-servico .grupo-servico > input {
+        height: 44px;
+        padding: 6px 7px;
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .pagina-editar-servico .linha-servico {
+        margin-top: 15px;
+        gap: 15px;
+    }
+
+    .pagina-editar-servico .campo-valor,
+    .pagina-editar-servico .campo-data {
+        height: 35px;
+    }
+
+    .pagina-editar-servico .campo-valor strong {
+        width: 35px;
+        flex-basis: 35px;
+        font-size: 8px;
+    }
+
+    .pagina-editar-servico .campo-valor input,
+    .pagina-editar-servico .campo-data input {
+        font-size: 9px;
+    }
+
+    .pagina-editar-servico .calendario-servico {
+        width: 19px;
+        height: 19px;
+        right: 6px;
+    }
+
+    .pagina-editar-servico .grupo-descricao {
+        margin-top: 15px;
+    }
+
+    .pagina-editar-servico .campo-descricao textarea {
+        height: 108px;
+        padding: 8px 8px 20px 31px;
+        font-size: 9px;
+        line-height: 12px;
+    }
+
+    .pagina-editar-servico .icone-descricao {
+        width: 16px;
+        height: 16px;
+        top: 8px;
+        left: 8px;
+    }
+
+    .pagina-editar-servico .contador-descricao {
+        font-size: 6px;
+    }
+
+    .pagina-editar-servico .botoes-servico {
+        padding-top: 14px;
+        gap: 7px;
+    }
+
+    .pagina-editar-servico .cancelar-servico,
+    .pagina-editar-servico .registrar-servico {
+        height: 35px;
+        font-size: 9px;
+    }
+}
